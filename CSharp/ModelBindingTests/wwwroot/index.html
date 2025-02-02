@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Model Binding Tests</title>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-beta.2/bundles/datastar.js"></script>
+    <link href="style.css" rel="stylesheet"/>
+</head>
+<body class="contents" data-signals='{ "sString":"Outside","sInt":10,"sInner": { "sInnerString":"Inside","sInnerInt":20 } }'>
+<div class="grid grid-cols-4 gap-4">
+    <div class="p-4"><input type="text" data-bind="$sString" class="input input-bordered w-full"></div>
+    <div class="p-4"><input type="text" data-bind="$sInt" class="input input-bordered w-full"></div>
+    <div class="p-4"><input type="text" data-bind="$sInner.sInnerString" class="input input-bordered w-full"></div>
+    <div class="p-4"><input type="text" data-bind="$sInner.sInnerInt" class="input input-bordered w-full"></div>
+</div>
+
+<div class="grid gap-3 grid-cols-3">
+    <button class="btn" data-on-click="@get('/test_get_signals')">test_get_signals</button>
+    <button class="btn" data-on-click="@get('/test_get_values')">test_get_values</button>
+    <button class="btn" data-on-click="@get('/test_get_inner')">test_get_inner</button>
+    <button class="btn" data-on-click="@get('/test_get_innerPathed')">test_get_innerPathed</button>
+    <button class="btn" data-on-click="@get('/test_get_inner_values')">test_get_inner_values</button>
+
+    <button class="btn" data-on-click="@post('/test_post_signals')">test_post_signals</button>
+    <button class="btn" data-on-click="@post('/test_post_values')">test_post_values</button>
+    <button class="btn" data-on-click="@post('/test_post_inner')">test_post_inner</button>
+    <button class="btn" data-on-click="@post('/test_post_innerPathed')">test_post_innerPathed</button>
+    <button class="btn" data-on-click="@post('/test_post_inner_values')">test_post_inner_values</button>
+</div>
+<hr>
+<form>
+    <div class="grid gap-3 grid-cols-2">
+        <div class="p-4"><input type="text" name="sString" value="Form" class="input input-bordered w-full max-w-xs"></div>
+        <div class="p-4"><input type="text" name="sInt" value="30" class="input input-bordered w-full max-w-xs"></div>
+    </div>
+    <div class="grid gap-3 grid-cols-2">
+        <button class="btn" data-on-click="@get('/test_form_get_values', {contentType: 'form'})">test_form_get_values</button>
+        <button class="btn" data-on-click="@post('/test_form_post_values', {contentType: 'form'})">test_form_post_values</button>
+    </div>
+</form>
+
+<pre id="output"></pre>
+</body>
+</html>
