@@ -1,27 +1,30 @@
 # Datastar Examples
 ### built using [Datastar](https://data-star.dev/) and [ASP.NET Core Web Apps](https://dotnet.microsoft.com/en-us/apps/aspnet)
 
-This repository contains four implementations of functionality using [Datastar](https://data-star.dev/) & [ASP.NET Core Web Apps](https://dotnet.microsoft.com/en-us/apps/aspnet):
+This repository contains implementations of functionality using [Datastar](https://data-star.dev/) & [ASP.NET Core Web Apps](https://dotnet.microsoft.com/en-us/apps/aspnet)
 
-1. *working* > An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-9.0) (Model-View-Controller)
-2. ****not*** working* > An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) (Razor Pages)
-  *for Razor Pages > getting a 400 Bad Request error when passing in /Index?handler=Search*
-3. *working* > An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) (Minimal APIs)
-4. ****not*** setup yet* > A [FastEndpoints](https://fast-endpoints.com/docs/server-sent-events) project
+1. *partially working* >>> An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-9.0) (Model-View-Controller)
+2. ****not*** working* >>> An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) (Razor Pages)
+  *for Razor Pages >>> getting a 400 Bad Request error when passing in /Index?handler=Search*
+3. *partially working* > An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) (Minimal APIs)
+4. ****not*** setup yet* >>> A [FastEndpoints](https://fast-endpoints.com/docs/server-sent-events) project
+5. ****not*** setup yet* >>> A [DamianEdwards / RazorSlices](https://github.com/DamianEdwards/RazorSlices) project
 
 ## Example Page [https://datastar.rickgraner.com](https://datastar.rickgraner.com)
 ![Active Search Demo](datastar-examples.png)  
 
 ## What is Datastar?
 
-Datastar is a lightweight hypermedia framework that brings reactive functionality to server-rendered applications. It combines the best of both worlds:
+Datastar is a lightweight hypermedia framework that brings reactive functionality to server-rendered applications.
 
+It combines the best of both worlds:
 - The simplicity and reliability of server-side rendering
-- The dynamic, reactive user experience in the style of a Single Page Application (SPA) but without the need for JavaScript
+- The dynamic, reactive user experience of a (SPA) Single Page Application w/o the need for JavaScript
+- Use JavaScript sparingly and only when you decide
 
 ## Why Use Datastar?
 
-- **Minimal JavaScript**: Just include a single 13.3 KiB file - smaller than Alpine.js and Htmx combined
+- **Minimal JavaScript**: Just include a single 14.5 KiB file - smaller than Alpine.js and Htmx combined
 - **HATEOAS Compliant**: The only JavaScript you need is the library itself > no additional client-side code required
 - **Server Technology Agnostic**: Write your backend in any language
 - **Real-time Updates**: Utilizes server-sent events for fast, responsive experiences
