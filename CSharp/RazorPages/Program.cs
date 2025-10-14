@@ -14,6 +14,8 @@ if (!app.Environment.IsDevelopment())
 }
 
 
+app.UseHttpsRedirection();
+
 app.Use(async (context, next) => {
 
     // is this a datastar request? Datastar-Request: true
@@ -23,6 +25,9 @@ app.Use(async (context, next) => {
     if (isDatastarRequest)
     {
         // TODO: parse the datastar payload and put it in context.Items as a simple, immutable, dictionary
+
+        // We need to write the response for the datastar request here and then not call next.Invoke().
+        // In order to do that, we need to know how to route the request or switch to a command handler pattern.
     }
 
     // The call to next.Invoke() triggers an exception that headers are being written but the response body has already started.
@@ -33,14 +38,15 @@ app.Use(async (context, next) => {
     }
     catch (InvalidOperationException ex)
     {
+        // NOTE: Even though this exception is thrown, the response to the datastar request has already been sent. 
+
         // Log the exception or handle it as needed
         Console.WriteLine("Caught an InvalidOperationException: " + ex.Message);
     }
 });
 
-app.UseHttpsRedirection();
 app.UseRouting();
-//app.UseAuthorization();
+app.UseAuthorization();
 
 
 app.MapStaticAssets();
