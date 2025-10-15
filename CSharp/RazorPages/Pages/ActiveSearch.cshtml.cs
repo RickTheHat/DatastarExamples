@@ -46,42 +46,58 @@ public class ActiveSearch : PageModel
 
     public async Task OnGetSearchAsync()
     {
-        await SseHelper.SetSseHeadersAsync(Response);
-
-        using var reader = new StreamReader(Request.Body);
-        var body = await reader.ReadToEndAsync();
-        var query = body.Replace("{\"input\":\"", "").Replace("\"}", "");
-
-        var filteredNotes = string.IsNullOrEmpty(query)
-            ? _notes.Take(5).ToList()
-            : _notes.Where(x => x.Content.Contains(query)).ToList();
-
-        // Send the total count of notes and the count of notes being displayed
-        var countsHtml = filteredNotes.Count == 0
-            ? $"<p id=\"total-count\">No results found for \"{query}\" out of {_totalNoteCount} notes</p>"
-            : $"<p id=\"total-count\">Showing {filteredNotes.Count} of {_totalNoteCount} notes</p>";
-        await SseHelper.SendServerSentEventAsync(Response, countsHtml);
-
-        // Send the notes list
-        var notesListHtml = "<div id=\"notes-list\">";
-        if (filteredNotes.Count == 0)
+        try
         {
-            notesListHtml += "<div class=\"note-item\">";
-            notesListHtml += $"<p>No notes found matching \"{query}\"</p>";
-            notesListHtml += "</div>";
-        }
-        else
-        {
-            foreach (var note in filteredNotes)
+            await SseHelper.SetSseHeadersAsync(Response);
+
+            /*
+            -- Request.Body is empty with GET
+            using var reader = new StreamReader(Request.Body);
+            var body = await reader.ReadToEndAsync();
+            var query = body.Replace("{\"input\":\"", "").Replace("\"}", "");
+            */
+            // TODO: Need a more robust way to handle datastar payloads. Probably a middleware that detects datastar requests (datastar sets a request header),
+            //       parses the payload into a dictionary, and then puts on the HttpContext.Items collection.
+            var body = Request.Query["datastar"].ToString();
+            var query = body.Replace("{\"input\":\"", "").Replace("\"}", "");
+
+            var filteredNotes = string.IsNullOrEmpty(query)
+                ? _notes.Take(5).ToList()
+                : _notes.Where(x => x.Content.Contains(query)).ToList();
+
+            // Send the total count of notes and the count of notes being displayed
+            var countsHtml = filteredNotes.Count == 0
+                ? $"<p id=\"total-count\">No results found for \"{query}\" out of {_totalNoteCount} notes</p>"
+                : $"<p id=\"total-count\">Showing {filteredNotes.Count} of {_totalNoteCount} notes</p>";
+            await SseHelper.SendServerSentEventAsync(Response, countsHtml);
+
+            // Send the notes list
+            var notesListHtml = "<div id=\"notes-list\">";
+            if (filteredNotes.Count == 0)
             {
                 notesListHtml += "<div class=\"note-item\">";
-                notesListHtml += $"<p>{note.Content}</p>";
+                notesListHtml += $"<p>No notes found matching \"{query}\"</p>";
                 notesListHtml += "</div>";
             }
+            else
+            {
+                foreach (var note in filteredNotes)
+                {
+                    notesListHtml += "<div class=\"note-item\">";
+                    notesListHtml += $"<p>{note.Content}</p>";
+                    notesListHtml += "</div>";
+                }
+            }
+
+            notesListHtml += "</div>";
+
+            await SseHelper.SendServerSentEventAsync(Response, notesListHtml);
         }
-
-        notesListHtml += "</div>";
-
-        await SseHelper.SendServerSentEventAsync(Response, notesListHtml);
+        catch (Exception ex)
+        {
+            // TODO: Handle exceptions (e.g., log them)
+            var errorHtml = $"<p>Error: {ex.Message}</p>";
+            await SseHelper.SendServerSentEventAsync(Response, errorHtml);
+        }
     }
 }

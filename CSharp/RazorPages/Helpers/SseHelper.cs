@@ -8,7 +8,10 @@ public static class SseHelper
     {
         response.Headers.Append("Cache-Control", "no-cache");
         response.Headers.Append("Content-Type", "text/event-stream");
-        response.Headers.Append("Connection", "keep-alive");
+
+        // HTTP/2.0 and later do not require the Connection: keep-alive header
+        //response.Headers.Append("Connection", "keep-alive");
+
         await response.Body.FlushAsync();
     }
 
