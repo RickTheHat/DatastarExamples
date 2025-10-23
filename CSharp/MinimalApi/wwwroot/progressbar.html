@@ -5,122 +5,140 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-          content="Progress Bar (Minimal API) - Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
+        content="Progress Bar (Minimal API) - Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
     <title>Progress Bar (Minimal API) - Datastar is The Hypermedia Framework</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
 <body>
-<div class="container">
-    <!-- Header -->
-    <header>
-        <div class="header-top">
-            <div class="header-images">
-                <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
-                    <img src="/img/rocket.webp" alt="Datastar logo">
-                </a>
-                <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
-                   aria-label="Visit Rick's GitHub profile">
-                    <img src="/img/rick.jpg" alt="Author profile" class="profile">
-                </a>
-            </div>
-            <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
-                <h1>ASP.NET Core Examples with Datastar</h1>
-            </a>
-        </div>
-        <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
-        <a href="/#examples" class="button">GO TO EXAMPLES</a>
-    </header>
-    <!-- ./ Header -->
-
-    <!-- Main -->
-    <main id="main-content">
-        <div class="demo-section">
-            <div style="display: flex; justify-content: space-between; gap: 1rem;">
-                <a href="lazytabs.html" class="demo-nav-link">
-                    ← PREVIOUS: LAZY TABS
-                </a>
-                <a href="sortable.html" class="demo-nav-link">
-                    NEXT: SORTABLE →
-                </a>
-            </div>
-
-            
-            <section id="example">
-                <h2>Progress Bar (Minimal API)</h2>
-                <p>This example shows how to implement an updating progress bar with min/max values</p>
-                <div style="position: relative; width: 100%;">
-                    <progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
-                    <span id="progressBarPercentage"
-                          style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-weight: bold;">0%</span>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div class="header-images">
+                    <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
+                        <img src="/img/rocket.webp" alt="Datastar logo">
+                    </a>
+                    <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
+                        aria-label="Visit Rick's GitHub profile">
+                        <img src="/img/rick.jpg" alt="Author profile" class="profile">
+                    </a>
                 </div>
-                <div class="button-container" data-signals="{shouldDisable:false}">
-                    <button id="startButton"
-                            data-on-click="$shouldDisable=true; @get('/api/progress?actionType=start',{openWhenHidden:true})"
+                <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
+                    <h1>ASP.NET Core Examples with Datastar</h1>
+                </a>
+            </div>
+            <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
+            <a href="/#examples" class="button">GO TO EXAMPLES</a>
+        </header>
+        <!-- ./ Header -->
+
+        <!-- Main -->
+        <main id="main-content">
+            <div class="demo-section">
+                <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                    <a href="lazytabs.html" class="demo-nav-link">
+                        ← PREVIOUS: LAZY TABS
+                    </a>
+                    <a href="sortable.html" class="demo-nav-link">
+                        NEXT: SORTABLE →
+                    </a>
+                </div>
+
+
+                <section id="example">
+                    <h2>Progress Bar (Minimal API)</h2>
+                    <p>This example shows how to implement an updating progress bar with min/max values</p>
+                    <div style="position: relative; width: 100%;">
+                        <progress id="progressBar" value="0" max="100" style="width: 100%;"></progress>
+                        <span id="progressBarPercentage"
+                            style="position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font-weight: bold;">0%</span>
+                    </div>
+                    <div class="button-container" data-signals="{shouldDisable:false}">
+                        <button id="startButton"
+                            data-on:click="$shouldDisable=true; @get('/api/progress?actionType=start',{openWhenHidden:true})"
                             data-attr-disabled="$shouldDisable">
-                        Start
-                    </button>
+                            Start
+                        </button>
+                    </div>
+                </section>
+
+                <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                    <a href="lazytabs.html" class="demo-nav-link">
+                        ← PREVIOUS: LAZY TABS
+                    </a>
+                    <a href="sortable.html" class="demo-nav-link">
+                        NEXT: SORTABLE →
+                    </a>
                 </div>
-            </section>
-
-            <div style="display: flex; justify-content: space-between; gap: 1rem;">
-                <a href="lazytabs.html" class="demo-nav-link">
-                    ← PREVIOUS: LAZY TABS
-                </a>
-                <a href="sortable.html" class="demo-nav-link">
-                    NEXT: SORTABLE →
-                </a>
             </div>
-        </div>
 
-        <!-- example navigation section -->
-        <section id="example-navigation">
-            <h2>More Examples</h2>
-            <p>Explore other Datastar examples and see what's possible with hypermedia-driven applications.</p>
-            <h3>Ported HTMX Examples</h3>
-            <ul class="example-nav">
-                <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span> Active Search</a></li>
-                <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span> Animations</a></li>
-                <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk Update</a></li>
-                <li><a href="clicktoedit.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Edit</a></li>
-                <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Load</a></li>
-                <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete Row</a></li>
-                <li><a href="dialogsbrowser.html"><span class="status-icon todo" title="Not Started">✗</span> Dialogs Browser</a></li>
-                <li><a href="editrow.html"><span class="status-icon todo" title="Not Started">✗</span> Edit Row</a></li>
-                <li><a href="fileupload.html"><span class="status-icon todo" title="Not Started">✗</span> File Upload</a></li>
-                <li><a href="indicator.html"><span class="status-icon pending" title="In Progress">✓</span> Indicator</a></li>
-                <li><a href="infinitescroll.html"><span class="status-icon todo" title="Not Started">✗</span> Infinite Scroll</a></li>
-                <li><a href="inlinevalidation.html"><span class="status-icon todo" title="Not Started">✗</span> Inline Validation</a></li>
-                <li><a href="lazyload.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy Load</a></li>
-                <li><a href="lazytabs.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy Tabs</a></li>
-                <li><a href="progressbar.html"><span class="status-icon complete" title="Example Complete">✓</span> Progress Bar</a></li>
-                <li><a href="sortable.html"><span class="status-icon todo" title="Not Started">✗</span> Sortable</a></li>
-                <li><a href="valueselect.html"><span class="status-icon todo" title="Not Started">✗</span> Value Select</a></li>
-            </ul>
-        </section>
-    </main>
-    <!-- ./Main -->
+            <!-- example navigation section -->
+            <section id="example-navigation">
+                <h2>More Examples</h2>
+                <p>Explore other Datastar examples and see what's possible with hypermedia-driven applications.</p>
+                <h3>Ported HTMX Examples</h3>
+                <ul class="example-nav">
+                    <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span>
+                            Active Search</a></li>
+                    <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Animations</a></li>
+                    <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk
+                            Update</a></li>
+                    <li><a href="clicktoedit.html"><span class="status-icon todo" title="Not Started">✗</span> Click to
+                            Edit</a></li>
+                    <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to
+                            Load</a></li>
+                    <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete
+                            Row</a></li>
+                    <li><a href="dialogsbrowser.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Dialogs Browser</a></li>
+                    <li><a href="editrow.html"><span class="status-icon todo" title="Not Started">✗</span> Edit Row</a>
+                    </li>
+                    <li><a href="fileupload.html"><span class="status-icon todo" title="Not Started">✗</span> File
+                            Upload</a></li>
+                    <li><a href="indicator.html"><span class="status-icon pending" title="In Progress">✓</span>
+                            Indicator</a></li>
+                    <li><a href="infinitescroll.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Infinite Scroll</a></li>
+                    <li><a href="inlinevalidation.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Inline Validation</a></li>
+                    <li><a href="lazyload.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy
+                            Load</a></li>
+                    <li><a href="lazytabs.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy
+                            Tabs</a></li>
+                    <li><a href="progressbar.html"><span class="status-icon complete" title="Example Complete">✓</span>
+                            Progress Bar</a></li>
+                    <li><a href="sortable.html"><span class="status-icon todo" title="Not Started">✗</span> Sortable</a>
+                    </li>
+                    <li><a href="valueselect.html"><span class="status-icon todo" title="Not Started">✗</span> Value
+                            Select</a></li>
+                </ul>
+            </section>
+        </main>
+        <!-- ./Main -->
 
-    <!-- Footer -->
-    <footer>
-        <small>
-            <p>
-                Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
-                    href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
-                    href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
-                    href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
-                    href="https://data-star.dev" target="_blank">Datastar</a> • <a
-                    href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
-                Core</a>
-            </p>
-        </small>
-    </footer>
-    <!-- ./ Footer -->
-</div>
+        <!-- Footer -->
+        <footer>
+            <small>
+                <p>
+                    Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
+                        href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
+                        href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
+                        href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
+                        href="https://data-star.dev" target="_blank">Datastar</a> • <a
+                        href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
+                        Core</a>
+                </p>
+            </small>
+        </footer>
+        <!-- ./ Footer -->
+    </div>
 </body>
 
 </html>

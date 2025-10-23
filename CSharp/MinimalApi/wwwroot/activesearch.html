@@ -5,121 +5,141 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-          content="Active Search (Minimal API) - Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
+        content="Active Search (Minimal API) - Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
     <title>Active Search (Minimal API) - Datastar is The Hypermedia Framework</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
 <body>
-<div class="container">
-    <!-- Header -->
-    <header>
-        <div class="header-top">
-            <div class="header-images">
-                <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
-                    <img src="/img/rocket.webp" alt="Datastar logo">
-                </a>
-                <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
-                   aria-label="Visit Rick's GitHub profile">
-                    <img src="/img/rick.jpg" alt="Author profile" class="profile">
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div class="header-images">
+                    <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
+                        <img src="/img/rocket.webp" alt="Datastar logo">
+                    </a>
+                    <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
+                        aria-label="Visit Rick's GitHub profile">
+                        <img src="/img/rick.jpg" alt="Author profile" class="profile">
+                    </a>
+                </div>
+                <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
+                    <h1>ASP.NET Core Examples with Datastar</h1>
                 </a>
             </div>
-            <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
-                <h1>ASP.NET Core Examples with Datastar</h1>
-            </a>
-        </div>
-        <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
-        <a href="/#examples" class="button">GO TO EXAMPLES</a>
-    </header>
-    <!-- ./ Header -->
+            <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
+            <a href="/#examples" class="button">GO TO EXAMPLES</a>
+        </header>
+        <!-- ./ Header -->
 
-    <!-- Main -->
-    <main id="main-content">
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <span></span> <!-- Empty span for spacing since this is the last page -->
-            <a href="/animations.html" class="demo-nav-link">
-                NEXT: ANIMATIONS →
-            </a>
-        </div>
-
-        
-        <section id="example">
-            <h2>Active Search (Minimal API)</h2>
-            <p>This example actively searches a notes database as the user enters text</p>
-            
-            <p id="total-count">Loading stats...</p>
-            <div class="example-content">
-                <div class="search-container">
-                    <input type="text" placeholder="Search..." class="search-input" data-bind-input data-on-input__debounce.1000ms="@put('api/search')" autocomplete="off" />
-                </div>
-                <div id="notes-list" data-on-load__delay.0s="@get('/api/notes')" class="notes-list">
-                    <div class="note-item">Loading notes...</div>
-                </div>
+        <!-- Main -->
+        <main id="main-content">
+            <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                <span></span> <!-- Empty span for spacing since this is the last page -->
+                <a href="/animations.html" class="demo-nav-link">
+                    NEXT: ANIMATIONS →
+                </a>
             </div>
-        </section>
 
-        <!-- code samples for the example with proper code formatting for c# -->
-        <section id="code">
-            <h2>Code</h2>
-            <p>TBD</p>
-            <!-- Code samples here -->
-        </section>
 
-        <div style="display: flex; justify-content: space-between; gap: 1rem;">
-            <span></span> <!-- Empty span for spacing since this is the last page -->
-            <a href="/animations.html" class="demo-nav-link">
-                NEXT: ANIMATIONS →
-            </a>
-        </div>
+            <section id="example">
+                <h2>Active Search (Minimal API)</h2>
+                <p>This example actively searches a notes database as the user enters text</p>
 
-        <!-- example navigation section -->
-        <section id="example-navigation">
-            <h2>More Examples</h2>
-            <p>Explore other Datastar examples and see what's possible with hypermedia-driven applications.</p>
-            <h3>Ported HTMX Examples</h3>
-            <ul class="example-nav">
-                <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span> Active Search</a></li>
-                <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span> Animations</a></li>
-                <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk Update</a></li>
-                <li><a href="clicktoedit.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Edit</a></li>
-                <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Load</a></li>
-                <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete Row</a></li>
-                <li><a href="dialogsbrowser.html"><span class="status-icon todo" title="Not Started">✗</span> Dialogs Browser</a></li>
-                <li><a href="editrow.html"><span class="status-icon todo" title="Not Started">✗</span> Edit Row</a></li>
-                <li><a href="fileupload.html"><span class="status-icon todo" title="Not Started">✗</span> File Upload</a></li>
-                <li><a href="indicator.html"><span class="status-icon pending" title="In Progress">✓</span> Indicator</a></li>
-                <li><a href="infinitescroll.html"><span class="status-icon todo" title="Not Started">✗</span> Infinite Scroll</a></li>
-                <li><a href="inlinevalidation.html"><span class="status-icon todo" title="Not Started">✗</span> Inline Validation</a></li>
-                <li><a href="lazyload.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy Load</a></li>
-                <li><a href="lazytabs.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy Tabs</a></li>
-                <li><a href="progressbar.html"><span class="status-icon complete" title="Example Complete">✓</span> Progress Bar</a></li>
-                <li><a href="sortable.html"><span class="status-icon todo" title="Not Started">✗</span> Sortable</a></li>
-                <li><a href="valueselect.html"><span class="status-icon todo" title="Not Started">✗</span> Value Select</a></li>
-            </ul>
-        </section>
-    </main>
-    <!-- ./Main -->
+                <p id="total-count">Loading stats...</p>
+                <div class="example-content">
+                    <div class="search-container">
+                        <input type="search" id="search-notes" name="input" placeholder="Search notes..."
+                            class="search-input" aria-label="Search notes" aria-describedby="total-count"
+                            data-bind:input data-on:input__debounce.500ms="@put('/api/search')" autocomplete="off" />
+                    </div>
+                    <div id="notes-list" data-init__delay.0s="@get('/api/notes')" class="notes-list">
+                        <div class="note-item">Loading notes...</div>
+                    </div>
+                </div>
+            </section>
 
-    <!-- Footer -->
-    <footer>
-        <small>
-            <p>
-                Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
-                    href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
-                    href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
-                    href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
-                    href="https://data-star.dev" target="_blank">Datastar</a> • <a
-                    href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
-                Core</a>
-            </p>
-        </small>
-    </footer>
-    <!-- ./ Footer -->
-</div>
+            <!-- code samples for the example with proper code formatting for c# -->
+            <section id="code">
+                <h2>Code</h2>
+                <p>TBD</p>
+                <!-- Code samples here -->
+            </section>
+
+            <div style="display: flex; justify-content: space-between; gap: 1rem;">
+                <span></span> <!-- Empty span for spacing since this is the last page -->
+                <a href="/animations.html" class="demo-nav-link">
+                    NEXT: ANIMATIONS →
+                </a>
+            </div>
+
+            <!-- example navigation section -->
+            <section id="example-navigation">
+                <h2>More Examples</h2>
+                <p>Explore other Datastar examples and see what's possible with hypermedia-driven applications.</p>
+                <h3>Ported HTMX Examples</h3>
+                <ul class="example-nav">
+                    <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span>
+                            Active Search</a></li>
+                    <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Animations</a></li>
+                    <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk
+                            Update</a></li>
+                    <li><a href="clicktoedit.html"><span class="status-icon todo" title="Not Started">✗</span> Click to
+                            Edit</a></li>
+                    <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to
+                            Load</a></li>
+                    <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete
+                            Row</a></li>
+                    <li><a href="dialogsbrowser.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Dialogs Browser</a></li>
+                    <li><a href="editrow.html"><span class="status-icon todo" title="Not Started">✗</span> Edit Row</a>
+                    </li>
+                    <li><a href="fileupload.html"><span class="status-icon todo" title="Not Started">✗</span> File
+                            Upload</a></li>
+                    <li><a href="indicator.html"><span class="status-icon pending" title="In Progress">✓</span>
+                            Indicator</a></li>
+                    <li><a href="infinitescroll.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Infinite Scroll</a></li>
+                    <li><a href="inlinevalidation.html"><span class="status-icon todo" title="Not Started">✗</span>
+                            Inline Validation</a></li>
+                    <li><a href="lazyload.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy
+                            Load</a></li>
+                    <li><a href="lazytabs.html"><span class="status-icon todo" title="Not Started">✗</span> Lazy
+                            Tabs</a></li>
+                    <li><a href="progressbar.html"><span class="status-icon complete" title="Example Complete">✓</span>
+                            Progress Bar</a></li>
+                    <li><a href="sortable.html"><span class="status-icon todo" title="Not Started">✗</span> Sortable</a>
+                    </li>
+                    <li><a href="valueselect.html"><span class="status-icon todo" title="Not Started">✗</span> Value
+                            Select</a></li>
+                </ul>
+            </section>
+        </main>
+        <!-- ./Main -->
+
+        <!-- Footer -->
+        <footer>
+            <small>
+                <p>
+                    Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
+                        href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
+                        href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
+                        href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
+                        href="https://data-star.dev" target="_blank">Datastar</a> • <a
+                        href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
+                        Core</a>
+                </p>
+            </small>
+        </footer>
+        <!-- ./ Footer -->
+    </div>
 </body>
 
 </html>

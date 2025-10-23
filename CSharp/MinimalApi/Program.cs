@@ -93,7 +93,7 @@ app.MapGet("/api/notes", async context =>
 
     // For initial load, just take first 5 notes
     var filteredNotes = notes.Take(5).ToList();
-    
+
     var countsHtml =
         $"<p id=\"total-count\">Showing <span class=\"number\">{filteredNotes.Count}</span> of <span class=\"number\">{totalNoteCount}</span> notes</p>";
     await SseHelper.SendServerSentEventAsync(context.Response, countsHtml);
