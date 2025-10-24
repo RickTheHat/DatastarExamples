@@ -14,33 +14,29 @@
 
     <section id="example">
         <h2>Lazy Load (ASP.NET MVC)</h2>
-        <p>Lazy loading demonstration will go here...</p>
-        <div id="lazy-load"
-             class="demo-content"
-             role="region"
-             aria-label="Demo visualization"
-             data-on-load="@@get('Home/LazyLoadImgGraph')">
-            <div class="flex justify-center gap-2 text-4xl"
-                 style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 4px;">
+        <p>This example shows how to lazily load an element on a page.</p>
+        
+        <style>
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+                border: 4px solid #f3f3f3;
+                border-top: 4px solid #3498db;
+                border-radius: 50%;
+                animation: spin 1s linear infinite;
+            }
+
+            @@keyframes spin {
+                0% { transform: rotate(0deg); }
+                100% { transform: rotate(360deg); }
+            }
+        </style>
+        
+        <div id="graph" data-init="@@get('/Home/LazyLoadImgGraph')">
+            <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; padding: 2rem; background: rgba(255, 255, 255, 0.05); border-radius: 4px;">
                 <div class="loading-spinner"></div>
                 <span>Loading...</span>
             </div>
-
-            <style>
-                .loading-spinner {
-                    width: 40px;
-                    height: 40px;
-                    border: 4px solid #f3f3f3;
-                    border-top: 4px solid #3498db;
-                    border-radius: 50%;
-                    animation: spin 1s linear infinite;
-                }
-
-                @@keyframes spin {
-                    0% { transform: rotate(0deg); }
-                    100% { transform: rotate(360deg); }
-                }
-            </style>
         </div>
     </section>
 

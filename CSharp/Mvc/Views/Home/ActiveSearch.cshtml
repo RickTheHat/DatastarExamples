@@ -22,8 +22,8 @@
     </p>
     <div class="example-content">
         <div class="search-container">
-            <input type="text" placeholder="Search..." class="search-input" data-bind-input
-                data-on-input__debounce.1000ms="@@put('Home/Search')" />
+            <input type="text" placeholder="Search..." class="search-input" data-bind:input
+                data-on:input__debounce.250ms="@@put('/Home/Search')" />
         </div>
         <div id="notes-list" class="notes-list">
             @foreach (var note in Model)

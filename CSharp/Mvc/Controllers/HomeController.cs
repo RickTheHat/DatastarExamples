@@ -1,9 +1,9 @@
 using System.Diagnostics;
-using Bogus;
-using Microsoft.AspNetCore.Mvc;
-using Mvc.Helpers;
-using Mvc.Models;
 using System.Text.Json;
+using Microsoft.AspNetCore.Mvc;
+using Mvc.Models;
+using Mvc.Helpers;
+using Bogus;
 
 namespace Mvc.Controllers;
 
@@ -177,6 +177,30 @@ public class HomeController : Controller
         var body = await reader.ReadToEndAsync();
         var query = body.Replace("{\"input\":\"", "").Replace("\"}", "").Trim();
 
+        // Cold-start guard: initialize notes if this endpoint is called directly
+        if (_notes == null || _notes.Count == 0)
+        {
+            var count = _random.Next(25, 102);
+            var todoFaker = new Faker<Note>()
+                .RuleFor(t => t.Id, f => f.IndexFaker + 1)
+                .RuleFor(t => t.Content, f => f.Lorem.Sentence());
+
+            _notes = todoFaker.Generate(count).ToList();
+
+            // Ensure some predictable matches for "hello"
+            for (var i = 0; i < 3 && _notes.Count > 0; i++)
+            {
+                var randomIndex = _random.Next(_notes.Count);
+                _notes[randomIndex] = new Note
+                {
+                    Id = _notes[randomIndex].Id,
+                    Content = $"hello! {new Faker().Lorem.Sentence()}"
+                };
+            }
+
+            _totalNoteCount = _notes.Count;
+        }
+
         var filteredNotes = string.IsNullOrEmpty(query)
             ? _notes.Take(5).ToList()
             : _notes.Where(x => x.Content.Contains(query, StringComparison.OrdinalIgnoreCase)).ToList();
@@ -252,15 +276,13 @@ public class HomeController : Controller
         // Simulate initial delay
         await Task.Delay(2000);
 
-        // Create HTML with transition and settling behavior
-        const string graphHtml = @"
-            <img id=""lazy-load""
-                class=""transition-opacity""
-                src=""/img/tokyo.png""
-                alt=""Tokyo Graph"" />";
+        // Create HTML with matching ID to replace the loading element
+        // The element must have the same ID as the target element it's replacing
+        const string graphHtml = @"<div id=""graph""><img src=""/img/tokyo.png"" alt=""Tokyo Graph"" style=""max-width: 100%; height: auto;"" /></div>";
 
-        // Send the HTML to the client
-        await SseHelper.SendServerSentEventAsync(Response, graphHtml, "", "", 500);
+        // Send the HTML to the client - it will morph into the element with id="graph"
+        // Set end=true to close the SSE connection properly
+        await SseHelper.SendServerSentEventAsync(Response, graphHtml, end: true);
     }
 
     public async Task FetchIndicator()
@@ -284,66 +306,76 @@ public class HomeController : Controller
     {
         // Set SSE headers
         await SseHelper.SetSseHeadersAsync(Response);
+        
+        // Cold-start guard: ensure notes exist
+        if (_notes == null || _notes.Count == 0)
+        {
+            var count = _random.Next(5, 10);
+            var todoFaker = new Faker<Note>()
+                .RuleFor(t => t.Id, f => f.IndexFaker + 1)
+                .RuleFor(t => t.Content, f => f.Lorem.Sentence());
 
-        // Check if the "datastar" query parameter exists
+            _notes = todoFaker.Generate(count).ToList();
+            _totalNoteCount = _notes.Count;
+        }
+
+        // Read signals from the request (Datastar automatically sends them for GET requests in query param)
+        ClickToLoadSignals signals = new ClickToLoadSignals { Offset = 0, Limit = 2 };
+        
         if (HttpContext.Request.Query.ContainsKey("datastar"))
         {
-            // Get the "datastar" query parameter values
             var json = HttpContext.Request.Query["datastar"].ToString();
-
-            // DEBUG: Print the raw JSON string
-            //Console.WriteLine($"Raw datastar value: {json}");
-
-            // Deserialize the JSON string into a ClickToLoadSignals object
-            var signals = JsonSerializer.Deserialize<ClickToLoadSignals>(json);
-
-            // DEBUG: Print the deserialized signals
-            //Console.WriteLine($"Deserialized signals: {signals.Offset}, {signals.Limit}");
-
-            // DEBUG: Print the deserialized values
-            // Console.WriteLine(signals != null
-            //     ? $"Offset: {signals.Offset}, Limit: {signals.Limit}"
-            //     : "Failed to deserialize datastar values");
-
-            // get the filtered notes
-            var filteredNotes = _notes
-                .Skip(signals.Offset)
-                .Take(signals.Limit)
-                .ToList();
-
-            // update the total counts
-            var totalCount = _totalNoteCount;
-            var currentCount = Math.Min(signals.Offset + filteredNotes.Count, totalCount);
-            var countHtml = $"<p id=\"total-count\">Showing {currentCount} of {totalCount} notes</p>";
-            await SseHelper.SendServerSentEventAsync(Response, countHtml);
-
-            // build the html for the new notes
-            var notesHtml = "";
-            foreach (var note in filteredNotes)
+            var tempSignals = JsonSerializer.Deserialize<ClickToLoadSignals>(json);
+            if (tempSignals != null)
             {
-                notesHtml += $@"
-                     <div class=""note-item"">
-                         <p>{note.Content}</p>
-                     </div>";
+                signals = tempSignals;
             }
-            await SseHelper.SendServerSentEventAsync(Response, notesHtml, "#notes-list", "append", 1000);
+        }
 
-            // Check if we've loaded all notes
-            if (filteredNotes.Count == 0 || currentCount >= totalCount)
-            {
-                var disabledButtonHtml = @"
-                    <button 
-                        id=""load-more-btn"" 
-                        class=""button-disabled""
-                        disabled>
-                        No More Results
-                    </button>";
-                await SseHelper.SendServerSentEventAsync(Response, disabledButtonHtml, "#load-more-btn", "outer");
-            }
+        // Get the filtered notes starting from current offset
+        var filteredNotes = _notes
+            .Skip(signals.Offset)
+            .Take(signals.Limit)
+            .ToList();
+
+        // Update the total counts
+        var totalCount = _totalNoteCount;
+        var currentCount = Math.Min(signals.Offset + filteredNotes.Count, totalCount);
+        var countHtml = $"<p id=\"total-count\">Showing {currentCount} of {totalCount} notes</p>";
+        await SseHelper.SendServerSentEventAsync(Response, countHtml);
+
+        // Build the html for the new notes
+        var notesHtml = "";
+        foreach (var note in filteredNotes)
+        {
+            notesHtml += $@"
+                 <div class=""note-item"">
+                     <p>{note.Content}</p>
+                 </div>";
+        }
+        await SseHelper.SendServerSentEventAsync(Response, notesHtml, "#notes-list", "append", 1000);
+
+        // Calculate new offset
+        var newOffset = signals.Offset + signals.Limit;
+        
+        // Check if we've loaded all notes
+        if (currentCount >= totalCount)
+        {
+            // Remove the load more button when all items are loaded
+            var disabledButtonHtml = @"
+                <button 
+                    id=""load-more-btn"" 
+                    class=""button-disabled""
+                    disabled>
+                    No More Results
+                </button>";
+            await SseHelper.SendServerSentEventAsync(Response, disabledButtonHtml, "#load-more-btn", "outer");
         }
         else
         {
-            Console.WriteLine("No datastar query parameters found.");
+            // Patch signals with new offset
+            var signalsJson = $"{{\"offset\": {newOffset}}}";
+            await SseHelper.PatchSignalsAsync(Response, signalsJson);
         }
     }
 
@@ -357,13 +389,13 @@ public class HomeController : Controller
         _notes.RemoveAll(x => x.Id == id);
 
         // update counts
-        var countsHtml = _notes.Count == 0
-            ? $"<p id=\"total-count\">No more notes</p><button id=\"load-more-btn\" data-on-click=\"@get('Home/DeleteRowReset')\" class=\"button\">Reset</button>"
-            : $"<p id=\"total-count\">Showing {_notes.Count} notes</p>";
+            var countsHtml = _notes.Count == 0
+                ? $"<p id=\"total-count\">No more notes</p><button id=\"load-more-btn\" data-on:click=\"@get('/Home/DeleteRowReset')\" class=\"button\">Reset</button>"
+                : $"<p id=\"total-count\">Showing {_notes.Count} notes</p>";
         await SseHelper.SendServerSentEventAsync(Response, countsHtml);
 
         // Send a Datastar remove fragment event
-        await SseHelper.SendServerSentEventAsync(Response, "", $"#note_{id}", "", 300, false, false, "datastar-remove-fragments");
+        await SseHelper.RemoveElementsAsync(Response, $"#note_{id}");
     }
 
     public async Task DeleteRowReset()
@@ -391,7 +423,7 @@ public class HomeController : Controller
             notesHtml += $@"
                     <div id=""note_{note.Id}"" class=""note-item"">
                         <p>{note.Content}</p>
-                        <button data-on-click=""@delete('Home/DeleteRowData/{note.Id}')"">Delete</button>
+                        <button data-on:click=""@delete('/Home/DeleteRowData/{note.Id}')"">Delete</button>
                     </div>";
         }
         notesHtml += "</div>";

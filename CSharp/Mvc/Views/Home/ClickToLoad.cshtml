@@ -20,7 +20,7 @@
             <p id="total-count">
                 Showing @ViewData["CurrentCount"] of @ViewData["TotalCount"] notes
             </p>
-            <div id="notes-list" class="notes-list" data-signals="{ offset: 0, limit: 2 }">
+            <div id="notes-list" class="notes-list">
                 @foreach (var note in Model)
                 {
                     <div class="note-item">
@@ -29,12 +29,13 @@
                 }
             </div>
             <div class="button-container">
-                <button 
-                    id="load-more-btn"
-                    data-on-click="$offset=$offset+$limit; $limit=2; @@get('Home/ClickToLoadMore')"
-                    data-attr-disabled="$fetching"
+                <button id="load-more-btn"
+                    data-signals="{offset: 0, limit: 2}"
+                    data-indicator:_fetching
+                    data-on:click="!$_fetching && @@get('/Home/ClickToLoadMore')"
                     class="button">
-                    Load More
+                    <span data-show="!$_fetching">Load More</span>
+                    <span data-show="$_fetching" aria-live="polite" style="margin-left: 0.5rem;">Loading…</span>
                 </button>
             </div>
         </div>

@@ -30,7 +30,7 @@
                     {
                         <div id="note_@note.Id" class="note-item">
                             <p>@note.Content</p>
-                            <button data-on-click="@@delete('Home/DeleteRowData/@note.Id')">Delete</button>
+                            <button data-on:click="@@delete('/Home/DeleteRowData/@note.Id')">Delete</button>
                         </div>
                     }
                 </div>
