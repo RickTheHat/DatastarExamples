@@ -686,3 +686,108 @@ section h3 {
 .demo-nav-link:active {
     transform: translateY(0);
 }
+
+/* Add these styles to your existing CSS file */
+.lazy-load {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+
+/* Update the demo-content class instead of creating a new demo-box */
+.demo-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.button-disabled {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: not-allowed !important;
+    border: none !important;
+    width: 100%;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.button-container {
+    margin-top: var(--spacing-md);
+    width: 100%;
+}
+
+.button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-mono);
+}
+
+.button:hover {
+    background: #b39552;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+    color: white;
+}
+
+.indicator {
+    opacity: 0;
+    transition: opacity 300ms ease-out;
+}
+
+.indicator.loading {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Header anchor links */
+.header-anchor {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+.header-anchor:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+h2:hover .header-anchor::after {
+    content: " #";
+    color: var(--accent-color);
+}
+
+.note-item.datastar-swapping {
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+    transition: opacity 1s ease-out;
+}

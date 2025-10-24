@@ -7,9 +7,9 @@ public class ProgressBar : PageModel
 {
     public void OnGet()
     {
-        
+
     }
-    
+
     // create a get method named progress
     public async Task OnGetProgressAsync()
     {

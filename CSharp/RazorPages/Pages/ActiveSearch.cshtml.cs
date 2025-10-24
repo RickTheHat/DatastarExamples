@@ -12,7 +12,8 @@ public class ActiveSearch : PageModel
     private static int _totalNoteCount;
     private readonly Random _random = new();
 
-    [BindProperty] public List<Note> Notes { get; set; }
+    [BindProperty]
+    public List<Note> Notes { get; set; }
 
     public void OnGet()
     {
@@ -24,7 +25,7 @@ public class ActiveSearch : PageModel
                 .RuleFor(t => t.Content, f => f.Lorem.Sentence());
 
             _notes = todoFaker.Generate(count);
-            
+
             // Add exactly 3 notes with "hello"
             for (var i = 0; i < 3; i++)
             {
@@ -35,7 +36,7 @@ public class ActiveSearch : PageModel
                     Content = $"hello! {new Faker().Lorem.Sentence()}"
                 };
             }
-            
+
             _totalNoteCount = _notes.Count;
         }
 
@@ -72,7 +73,7 @@ public class ActiveSearch : PageModel
             await SseHelper.SendServerSentEventAsync(Response, countsHtml);
 
             // Send the notes list
-            var notesListHtml = "<div id=\"notes-list\">";
+            var notesListHtml = "<div id=\"notes-list\" class=\"notes-list\">";
             if (filteredNotes.Count == 0)
             {
                 notesListHtml += "<div class=\"note-item\">";

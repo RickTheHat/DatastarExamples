@@ -14,8 +14,6 @@
             NEXT: SORTABLE →
         </a>
     </div>
-
-    
     <section id="example">
         <h2>Progress Bar (ASP.NET Razor Pages)</h2>
         <p>This example shows how to implement an updating progress bar with min/max values</p>
@@ -26,14 +24,14 @@
         </div>
         <div class="button-container" data-signals="{shouldDisable:false}">
             <button id="startButton"
-                data-on-click="$shouldDisable=true; @@get('/ProgressBar/Progress&actionType=start',{openWhenHidden:true})"
-                data-attr-disabled="$shouldDisable">
+                data-on:click="$shouldDisable=true; @@get('./ProgressBar?handler=Progress&actionType=start',{openWhenHidden:true})"
+                data-attr:disabled="$shouldDisable">
                 Start
             </button>
             @* TODO - Add the following buttons and properly disable them *@
-            @* <button id="continuousButton" data-on-click="@@get('Home/Progress?actionType=repeat',{openWhenHidden:true})">Repeating</button> *@
-            @* <button id="incrementButton" data-on-click="@@get('Home/Progress?actionType=increment',{openWhenHidden:true})">Increment</button> *@
-            @* <button id="resetButton" data-on-click="@@get('Home/Progress?actionType=reset',{openWhenHidden:true})">Reset</button> *@
+            @* <button id="continuousButton" data-on:click="@@get('Home/Progress?actionType=repeat',{openWhenHidden:true})">Repeating</button> *@
+            @* <button id="incrementButton" data-on:click="@@get('Home/Progress?actionType=increment',{openWhenHidden:true})">Increment</button> *@
+            @* <button id="resetButton" data-on:click="@@get('Home/Progress?actionType=reset',{openWhenHidden:true})">Reset</button> *@
         </div>
     </section>
 

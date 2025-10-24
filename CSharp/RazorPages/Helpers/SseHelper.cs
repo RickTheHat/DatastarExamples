@@ -8,30 +8,37 @@ public static class SseHelper
     {
         response.Headers.Append("Cache-Control", "no-cache");
         response.Headers.Append("Content-Type", "text/event-stream");
-
-        // HTTP/2.0 and later do not require the Connection: keep-alive header
-        //response.Headers.Append("Connection", "keep-alive");
-
+        response.Headers.Append("Connection", "keep-alive");
         await response.Body.FlushAsync();
     }
 
+    /// <summary>
+    /// Send a Datastar "datastar-patch-elements" SSE event.
+    /// </summary>
+    /// <param name="response">HTTP response to write the SSE to.</param>
+    /// <param name="elements">One or more complete HTML elements (must have an id if no selector is provided).</param>
+    /// <param name="selector">Optional CSS selector for the target element.</param>
+    /// <param name="mergeMode">Patch mode: outer|inner|replace|prepend|append|before|after|remove. Defaults to outer.</param>
+    /// <param name="settleDuration">Deprecated. No longer used in RC.6; kept for call-site compatibility.</param>
+    /// <param name="useViewTransition">Whether to wrap the patch in a View Transition.</param>
+    /// <param name="end">Whether to close the response stream after sending.</param>
     public static async Task SendServerSentEventAsync(
         HttpResponse response
-        , string fragment
+        , string elements
         , string selector = null
         , string mergeMode = null
         , int settleDuration = 300
         , bool useViewTransition = false
         , bool end = false)
     {
-        // Clean the fragment by removing all newlines and extra spaces
-        fragment = fragment
+        // Normalize elements by removing all newlines and extra spaces
+        elements = elements
             .Replace(Environment.NewLine, "")
             .Replace("\n", "")
             .Replace("\r", "")
             .Trim();
 
-        var data = "event: datastar-merge-fragments\n";
+        var data = "event: datastar-patch-elements\n";
 
         if (!string.IsNullOrEmpty(selector))
         {
@@ -40,12 +47,7 @@ public static class SseHelper
 
         if (!string.IsNullOrEmpty(mergeMode))
         {
-            data += $"data: mergeMode {mergeMode}\n";
-        }
-
-        if (settleDuration != 300)
-        {
-            data += $"data: settleDuration {settleDuration}\n";
+            data += $"data: mode {mergeMode}\n";
         }
 
         if (useViewTransition)
@@ -53,9 +55,72 @@ public static class SseHelper
             data += $"data: useViewTransition {useViewTransition}\n";
         }
 
-        data += $"data: fragments {fragment}\n\n";
+        data += $"data: elements {elements}\n\n";
 
         await response.Body.WriteAsync(Encoding.UTF8.GetBytes(data));
+        await response.Body.FlushAsync();
+
+        if (end)
+        {
+            response.Body.Close();
+        }
+    }
+
+    /// <summary>
+    /// Send a Datastar "datastar-patch-signals" SSE event.
+    /// </summary>
+    /// <param name="response">HTTP response to write the SSE to.</param>
+    /// <param name="signalsJson">RFC 7386 JSON Merge Patch payload as a JSON string (e.g., {"foo":1}).</param>
+    /// <param name="onlyIfMissing">If true, only sets signals that do not already exist.</param>
+    /// <param name="end">Whether to close the response stream after sending.</param>
+    public static async Task PatchSignalsAsync(
+        HttpResponse response,
+        string signalsJson,
+        bool onlyIfMissing = false,
+        bool end = false)
+    {
+        // Normalize signals JSON to a single line
+        var normalized = (signalsJson ?? string.Empty)
+            .Replace(Environment.NewLine, "")
+            .Replace("\n", "")
+            .Replace("\r", "")
+            .Trim();
+
+        var sb = new StringBuilder();
+        sb.AppendLine("event: datastar-patch-signals");
+        if (onlyIfMissing)
+        {
+            sb.AppendLine("data: onlyIfMissing true");
+        }
+        sb.AppendLine($"data: signals {normalized}");
+        sb.AppendLine();
+
+        var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+        await response.Body.WriteAsync(bytes);
+        await response.Body.FlushAsync();
+
+        if (end)
+        {
+            response.Body.Close();
+        }
+    }
+
+    /// <summary>
+    /// Convenience helper to remove an element using patch-elements with mode remove.
+    /// </summary>
+    public static async Task RemoveElementsAsync(HttpResponse response, string selector, bool end = false)
+    {
+        var sb = new StringBuilder();
+        sb.AppendLine("event: datastar-patch-elements");
+        sb.AppendLine("data: mode remove");
+        if (!string.IsNullOrWhiteSpace(selector))
+        {
+            sb.AppendLine($"data: selector {selector}");
+        }
+        sb.AppendLine();
+
+        var bytes = Encoding.UTF8.GetBytes(sb.ToString());
+        await response.Body.WriteAsync(bytes);
         await response.Body.FlushAsync();
 
         if (end)
