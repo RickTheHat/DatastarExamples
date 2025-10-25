@@ -1,16 +1,12 @@
 # Datastar Examples
-### built using [Datastar](https://data-star.dev/) and [ASP.NET Core Web Apps](https://dotnet.microsoft.com/en-us/apps/aspnet)
+### Built using [Datastar](https://data-star.dev/) and [ASP.NET Core](https://dotnet.microsoft.com/en-us/apps/aspnet)
 
-This repository contains implementations of functionality using [Datastar](https://data-star.dev/) & [ASP.NET Core Web Apps](https://dotnet.microsoft.com/en-us/apps/aspnet)
+1. [MVC](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-9.0) > *examples partially finished*
+2. [Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) > *examples partially finished*
+3. [Minimal API](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) > *examples partially finished*
+5. [RazorSlices by Damian Edwards](https://github.com/DamianEdwards/RazorSlices) > *tbd*
 
-1. *partially working* >>> An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-9.0) (Model-View-Controller)
-2. ****not*** working* >>> An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) (Razor Pages)
-  *for Razor Pages >>> getting a 400 Bad Request error when passing in /Index?handler=Search*
-3. *partially working* > An [ASP.NET Core Web App](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) (Minimal APIs)
-4. ****not*** setup yet* >>> A [FastEndpoints](https://fast-endpoints.com/docs/server-sent-events) project
-5. ****not*** setup yet* >>> A [DamianEdwards / RazorSlices](https://github.com/DamianEdwards/RazorSlices) project
-
-## Example Page [https://datastar.rickgraner.com](https://datastar.rickgraner.com)
+## MVC project [https://datastar.rickgraner.com](https://datastar.rickgraner.com)
 ![Active Search Demo](datastar-examples.png)  
 
 ## What is Datastar?
