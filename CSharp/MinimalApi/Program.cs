@@ -14,6 +14,25 @@ var totalNoteCount = 0;
 var currentContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
 var originalContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
 
+// Edit Row state
+var contacts = new List<Contact>
+{
+    new Contact { Id = 0, FirstName = "Joe", LastName = "Smith", Email = "joe@smith.org" },
+    new Contact { Id = 1, FirstName = "Angie", LastName = "MacDowell", Email = "angie@macdowell.org" },
+    new Contact { Id = 2, FirstName = "Fuqua", LastName = "Tarkenton", Email = "fuqua@tarkenton.org" },
+    new Contact { Id = 3, FirstName = "Kim", LastName = "Yee", Email = "kim@yee.org" }
+};
+
+var originalContacts = new List<Contact>
+{
+    new Contact { Id = 0, FirstName = "Joe", LastName = "Smith", Email = "joe@smith.org" },
+    new Contact { Id = 1, FirstName = "Angie", LastName = "MacDowell", Email = "angie@macdowell.org" },
+    new Contact { Id = 2, FirstName = "Fuqua", LastName = "Tarkenton", Email = "fuqua@tarkenton.org" },
+    new Contact { Id = 3, FirstName = "Kim", LastName = "Yee", Email = "kim@yee.org" }
+};
+
+int? editingContactId = null;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services for browser refresh in development
@@ -398,4 +417,180 @@ app.MapPatch("/api/clicktoedit/reset", async context =>
     await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
 });
 
+// Edit Row endpoints
+app.MapGet("/api/editrow/form", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    var id = int.Parse(context.Request.Query["id"].ToString());
+
+    if (id < 0 || id >= contacts.Count)
+    {
+        return;
+    }
+
+    editingContactId = id;
+    var contact = contacts[id];
+
+    // Generate the entire table with the edit form for this row
+    var tableHtml = GenerateContactsTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#contacts-table", "inner");
+});
+
+app.MapPatch("/api/editrow/save", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    var id = int.Parse(context.Request.Query["id"].ToString());
+
+    if (id < 0 || id >= contacts.Count)
+    {
+        return;
+    }
+
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+
+    try
+    {
+        var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+
+        if (signalData != null)
+        {
+            var contact = contacts[id];
+            
+            // Look for name{id} signal
+            if (signalData.TryGetValue($"name{id}", out var name) && name != null)
+            {
+                var fullName = name.ToString()?.Split(' ', 2);
+                if (fullName?.Length == 2)
+                {
+                    contact.FirstName = fullName[0];
+                    contact.LastName = fullName[1];
+                }
+                else if (fullName?.Length == 1)
+                {
+                    contact.FirstName = fullName[0];
+                }
+            }
+            
+            // Look for email{id} signal
+            if (signalData.TryGetValue($"email{id}", out var email) && email != null)
+            {
+                contact.Email = email.ToString() ?? contact.Email;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error parsing signals: {ex.Message}");
+    }
+
+    editingContactId = null;
+
+    // Return the updated table
+    var tableHtml = GenerateContactsTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#contacts-table", "inner");
+});
+
+app.MapGet("/api/editrow/cancel", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    var id = int.Parse(context.Request.Query["id"].ToString());
+    editingContactId = null;
+
+    // Return the table in view mode
+    var tableHtml = GenerateContactsTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#contacts-table", "inner");
+});
+
+app.MapGet("/api/editrow/reset", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Reset contacts to original values
+    for (int i = 0; i < contacts.Count && i < originalContacts.Count; i++)
+    {
+        contacts[i].FirstName = originalContacts[i].FirstName;
+        contacts[i].LastName = originalContacts[i].LastName;
+        contacts[i].Email = originalContacts[i].Email;
+    }
+
+    editingContactId = null;
+
+    // Return the reset table
+    var tableHtml = GenerateContactsTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#contacts-table", "inner");
+});
+
 app.Run();
+
+// Helper method to generate contacts table HTML
+string GenerateContactsTable()
+{
+    var rows = new System.Text.StringBuilder();
+
+    for (int i = 0; i < contacts.Count; i++)
+    {
+        var contact = contacts[i];
+        
+        if (editingContactId == i)
+        {
+            // Edit mode row
+            rows.AppendLine($@"
+                <tr id=""contact-{i}"">
+                    <td>
+                        <input 
+                            type=""text"" 
+                            data-bind:name{i}
+                            value=""{contact.FirstName} {contact.LastName}""
+                        >
+                    </td>
+                    <td>
+                        <input 
+                            type=""email"" 
+                            data-bind:email{i}
+                            value=""{contact.Email}""
+                        >
+                    </td>
+                    <td>
+                        <div class=""edit-row-actions"">
+                            <button 
+                                class=""button success""
+                                data-on:click=""@patch('/api/editrow/save?id={i}')""
+                            >
+                                Save
+                            </button>
+                            <button 
+                                class=""button error""
+                                data-on:click=""@get('/api/editrow/cancel?id={i}')""
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </td>
+                </tr>");
+        }
+        else
+        {
+            // View mode row
+            rows.AppendLine($@"
+                <tr id=""contact-{i}"">
+                    <td>{contact.FirstName} {contact.LastName}</td>
+                    <td>{contact.Email}</td>
+                    <td>
+                        <button 
+                            class=""button info""
+                            data-on:click=""@get('/api/editrow/form?id={i}')""
+                            {(editingContactId.HasValue && editingContactId != i ? "disabled" : "")}
+                        >
+                            Edit
+                        </button>
+                    </td>
+                </tr>");
+        }
+    }
+
+    return rows.ToString();
+}
