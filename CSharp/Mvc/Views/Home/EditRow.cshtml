@@ -13,9 +13,81 @@
 
     <section id="example">
         <h2>Edit Row (ASP.NET MVC)</h2>
-        <p>Edit row demonstration will go here...</p>
+        <p>Click the "Edit" button on any row to make it editable. Use "Save" to persist changes or "Cancel" to discard them.</p>
         <div class="demo-content" role="region" aria-label="Demo visualization">
-            demo goes here
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr style="background-color: #f0f0f0;">
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #ccc;">Name</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #ccc;">Email</th>
+                        <th style="padding: 0.75rem; text-align: left; border-bottom: 2px solid #ccc;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="contacts-table">
+                    <tr id="contact-0" style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.75rem;">Joe Smith</td>
+                        <td style="padding: 0.75rem;">joe@@smith.org</td>
+                        <td style="padding: 0.75rem;">
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('/Home/EditRowForm?id=0')"
+                                type="button"
+                                style="padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-1" style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.75rem;">Angie MacDowell</td>
+                        <td style="padding: 0.75rem;">angie@@macdowell.org</td>
+                        <td style="padding: 0.75rem;">
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('/Home/EditRowForm?id=1')"
+                                style="padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-2" style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.75rem;">Fuqua Tarkenton</td>
+                        <td style="padding: 0.75rem;">fuqua@@tarkenton.org</td>
+                        <td style="padding: 0.75rem;">
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('/Home/EditRowForm?id=2')"
+                                style="padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-3" style="border-bottom: 1px solid #ddd;">
+                        <td style="padding: 0.75rem;">Kim Yee</td>
+                        <td style="padding: 0.75rem;">kim@@yee.org</td>
+                        <td style="padding: 0.75rem;">
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('/Home/EditRowForm?id=3')"
+                                style="padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="margin-top: 1rem;">
+                <button 
+                    class="button warning"
+                    data-on:click="@@get('/Home/EditRowReset')"
+                    style="padding: 0.5rem 1rem; background-color: #ff9800; color: white; border: none; border-radius: 4px; cursor: pointer;"
+                >
+                    Reset
+                </button>
+            </div>
         </div>
     </section>
 

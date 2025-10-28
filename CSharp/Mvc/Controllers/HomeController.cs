@@ -13,6 +13,26 @@ public class HomeController : Controller
     private static int _totalNoteCount;
     private static Contact _currentContact = new() { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
     private static Contact _originalContact = new() { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+    
+    // Edit Row contacts
+    private static List<Contact> _contacts = new()
+    {
+        new Contact { Id = 0, FirstName = "Joe", LastName = "Smith", Email = "joe@smith.org" },
+        new Contact { Id = 1, FirstName = "Angie", LastName = "MacDowell", Email = "angie@macdowell.org" },
+        new Contact { Id = 2, FirstName = "Fuqua", LastName = "Tarkenton", Email = "fuqua@tarkenton.org" },
+        new Contact { Id = 3, FirstName = "Kim", LastName = "Yee", Email = "kim@yee.org" }
+    };
+    
+    private static List<Contact> _originalContacts = new()
+    {
+        new Contact { Id = 0, FirstName = "Joe", LastName = "Smith", Email = "joe@smith.org" },
+        new Contact { Id = 1, FirstName = "Angie", LastName = "MacDowell", Email = "angie@macdowell.org" },
+        new Contact { Id = 2, FirstName = "Fuqua", LastName = "Tarkenton", Email = "fuqua@tarkenton.org" },
+        new Contact { Id = 3, FirstName = "Kim", LastName = "Yee", Email = "kim@yee.org" }
+    };
+    
+    private static int? _editingContactId = null;
+    
     private readonly Random _random = new();
 
     public IActionResult Index()
@@ -334,6 +354,177 @@ public class HomeController : Controller
     public IActionResult EditRow()
     {
         return View();
+    }
+
+    public async Task EditRowForm(int id)
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        if (id < 0 || id >= _contacts.Count)
+        {
+            return;
+        }
+
+        _editingContactId = id;
+        var contact = _contacts[id];
+
+        // Generate the entire table with the edit form for this row
+        var tableHtml = GenerateContactsTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+    }
+
+    [HttpPatch]
+    public async Task EditRowSave(int id)
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        if (id < 0 || id >= _contacts.Count)
+        {
+            return;
+        }
+
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+
+        try
+        {
+            var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+
+            if (signalData != null)
+            {
+                var contact = _contacts[id];
+                
+                if (signalData.TryGetValue("name", out var name) && name != null)
+                {
+                    var fullName = name.ToString()?.Split(' ', 2);
+                    if (fullName?.Length == 2)
+                    {
+                        contact.FirstName = fullName[0];
+                        contact.LastName = fullName[1];
+                    }
+                    else if (fullName?.Length == 1)
+                    {
+                        contact.FirstName = fullName[0];
+                    }
+                }
+                
+                if (signalData.TryGetValue("email", out var email) && email != null)
+                {
+                    contact.Email = email.ToString() ?? contact.Email;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error parsing signals: {ex.Message}");
+        }
+
+        _editingContactId = null;
+
+        // Return the updated table
+        var tableHtml = GenerateContactsTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+    }
+
+    public async Task EditRowCancel(int id)
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        _editingContactId = null;
+
+        // Return the table in view mode
+        var tableHtml = GenerateContactsTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+    }
+
+    public async Task EditRowReset()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        // Reset contacts to original values
+        for (int i = 0; i < _contacts.Count && i < _originalContacts.Count; i++)
+        {
+            _contacts[i].FirstName = _originalContacts[i].FirstName;
+            _contacts[i].LastName = _originalContacts[i].LastName;
+            _contacts[i].Email = _originalContacts[i].Email;
+        }
+
+        _editingContactId = null;
+
+        // Return the reset table
+        var tableHtml = GenerateContactsTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+    }
+
+    private string GenerateContactsTable()
+    {
+        var rows = new System.Text.StringBuilder();
+
+        for (int i = 0; i < _contacts.Count; i++)
+        {
+            var contact = _contacts[i];
+            
+            if (_editingContactId == i)
+            {
+                // Edit mode row
+                rows.AppendLine($@"
+                    <tr id=""contact-{i}"" style=""border-bottom: 1px solid #ddd;"">
+                        <td style=""padding: 0.75rem;"">
+                            <input 
+                                type=""text"" 
+                                data-bind:name
+                                value=""{contact.FirstName} {contact.LastName}""
+                                style=""width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                            >
+                        </td>
+                        <td style=""padding: 0.75rem;"">
+                            <input 
+                                type=""email"" 
+                                data-bind:email
+                                value=""{contact.Email}""
+                                style=""width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                            >
+                        </td>
+                        <td style=""padding: 0.75rem; display: flex; gap: 0.5rem;"">
+                            <button 
+                                class=""button success""
+                                data-on:click=""@patch('/Home/EditRowSave?id={i}')""
+                                style=""padding: 0.5rem 1rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;""
+                            >
+                                Save
+                            </button>
+                            <button 
+                                class=""button error""
+                                data-on:click=""@get('/Home/EditRowCancel?id={i}')""
+                                style=""padding: 0.5rem 1rem; background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;""
+                            >
+                                Cancel
+                            </button>
+                        </td>
+                    </tr>");
+            }
+            else
+            {
+                // View mode row
+                rows.AppendLine($@"
+                    <tr id=""contact-{i}"" style=""border-bottom: 1px solid #ddd;"">
+                        <td style=""padding: 0.75rem;"">{contact.FirstName} {contact.LastName}</td>
+                        <td style=""padding: 0.75rem;"">{contact.Email}</td>
+                        <td style=""padding: 0.75rem;"">
+                            <button 
+                                class=""button info""
+                                data-on:click=""@get('/Home/EditRowForm?id={i}')""
+                                style=""padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;""
+                                {(_editingContactId.HasValue && _editingContactId != i ? "disabled" : "")}
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>");
+            }
+        }
+
+        return rows.ToString();
     }
 
     public IActionResult FileUpload()
