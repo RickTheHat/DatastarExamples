@@ -67,57 +67,60 @@ public class HomeController : Controller
     public async Task ClickToEditForm()
     {
         await SseHelper.SetSseHeadersAsync(Response);
-        
+
         // Return the edit form with current contact data
         var editFormHtml = $@"
-<div id=""demo"">
-    <label>
-        First Name
-        <input
-            type=""text""
-            data-bind:first-name
-            value=""{_currentContact.FirstName}""
-            data-attr:disabled=""$_fetching""
-        >
-    </label>
-    <label>
-        Last Name
-        <input
-            type=""text""
-            data-bind:last-name
-            value=""{_currentContact.LastName}""
-            data-attr:disabled=""$_fetching""
-        >
-    </label>
-    <label>
-        Email
-        <input
-            type=""email""
-            data-bind:email
-            value=""{_currentContact.Email}""
-            data-attr:disabled=""$_fetching""
-        >
-    </label>
-    <div role=""group"">
-        <button
-            class=""button success""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@@put('/Home/ClickToEditSave')""
-        >
-            Save
-        </button>
-        <button
-            class=""button error""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@@get('/Home/ClickToEditCancel')""
-        >
-            Cancel
-        </button>
-    </div>
-</div>";
-        
+        <div id=""demo"" style=""display: flex; flex-direction: column; gap: 1rem;"">
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                First Name
+                <input
+                    type=""text""
+                    data-bind:first-name
+                    value=""{_currentContact.FirstName}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                Last Name
+                <input
+                    type=""text""
+                    data-bind:last-name
+                    value=""{_currentContact.LastName}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                Email
+                <input
+                    type=""email""
+                    data-bind:email
+                    value=""{_currentContact.Email}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <div role=""group"" style=""display: flex; gap: 1rem;"">
+                <button
+                    class=""button success""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@put('/Home/ClickToEditSave')""
+                >
+                    Save
+                </button>
+                <button
+                    class=""button error""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/Home/ClickToEditCancel')""
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>";
+
         await SseHelper.SendServerSentEventAsync(Response, editFormHtml, "#demo");
     }
 
@@ -128,21 +131,31 @@ public class HomeController : Controller
 
         using var reader = new StreamReader(Request.Body);
         var body = await reader.ReadToEndAsync();
-        
-        // Parse the signals to extract contact data
-        var signalData = JsonSerializer.Deserialize<JsonElement>(body);
-        
-        if (signalData.TryGetProperty("firstName", out var firstNameElement))
+
+        try
         {
-            _currentContact.FirstName = firstNameElement.GetString() ?? _currentContact.FirstName;
+            // Parse the signals JSON to extract contact data
+            var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+
+            if (signalData != null)
+            {
+                if (signalData.TryGetValue("firstName", out var firstName) && firstName != null)
+                {
+                    _currentContact.FirstName = firstName.ToString() ?? _currentContact.FirstName;
+                }
+                if (signalData.TryGetValue("lastName", out var lastName) && lastName != null)
+                {
+                    _currentContact.LastName = lastName.ToString() ?? _currentContact.LastName;
+                }
+                if (signalData.TryGetValue("email", out var email) && email != null)
+                {
+                    _currentContact.Email = email.ToString() ?? _currentContact.Email;
+                }
+            }
         }
-        if (signalData.TryGetProperty("lastName", out var lastNameElement))
+        catch (Exception ex)
         {
-            _currentContact.LastName = lastNameElement.GetString() ?? _currentContact.LastName;
-        }
-        if (signalData.TryGetProperty("email", out var emailElement))
-        {
-            _currentContact.Email = emailElement.GetString() ?? _currentContact.Email;
+            System.Diagnostics.Debug.WriteLine($"Error parsing signals: {ex.Message}");
         }
 
         // Sanitize the values (simple profanity filter for demo)
@@ -160,7 +173,7 @@ public class HomeController : Controller
             class=""button info""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@get('/Home/ClickToEditForm')""
+            data-on:click=""@get('/Home/ClickToEditForm')""
         >
             Edit
         </button>
@@ -168,7 +181,7 @@ public class HomeController : Controller
             class=""button warning""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@patch('/Home/ClickToEditReset')""
+            data-on:click=""@patch('/Home/ClickToEditReset')""
         >
             Reset
         </button>
@@ -193,7 +206,7 @@ public class HomeController : Controller
             class=""button info""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@get('/Home/ClickToEditForm')""
+            data-on:click=""@get('/Home/ClickToEditForm')""
         >
             Edit
         </button>
@@ -201,7 +214,7 @@ public class HomeController : Controller
             class=""button warning""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@patch('/Home/ClickToEditReset')""
+            data-on:click=""@patch('/Home/ClickToEditReset')""
         >
             Reset
         </button>
@@ -230,7 +243,7 @@ public class HomeController : Controller
             class=""button info""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@get('/Home/ClickToEditForm')""
+            data-on:click=""@get('/Home/ClickToEditForm')""
         >
             Edit
         </button>
@@ -238,7 +251,7 @@ public class HomeController : Controller
             class=""button warning""
             data-indicator:_fetching
             data-attr:disabled=""$_fetching""
-            data-on:click=""@@patch('/Home/ClickToEditReset')""
+            data-on:click=""@patch('/Home/ClickToEditReset')""
         >
             Reset
         </button>
@@ -256,7 +269,7 @@ public class HomeController : Controller
         // Simple profanity filter - replace common profanity with asterisks
         var profanityList = new[] { "badword1", "badword2" };
         var result = input;
-        
+
         foreach (var word in profanityList)
         {
             result = System.Text.RegularExpressions.Regex.Replace(
@@ -514,7 +527,7 @@ public class HomeController : Controller
     {
         // Set SSE headers
         await SseHelper.SetSseHeadersAsync(Response);
-        
+
         // Cold-start guard: ensure notes exist
         if (_notes == null || _notes.Count == 0)
         {
@@ -529,7 +542,7 @@ public class HomeController : Controller
 
         // Read signals from the request (Datastar automatically sends them for GET requests in query param)
         ClickToLoadSignals signals = new ClickToLoadSignals { Offset = 0, Limit = 2 };
-        
+
         if (HttpContext.Request.Query.ContainsKey("datastar"))
         {
             var json = HttpContext.Request.Query["datastar"].ToString();
@@ -565,7 +578,7 @@ public class HomeController : Controller
 
         // Calculate new offset
         var newOffset = signals.Offset + signals.Limit;
-        
+
         // Check if we've loaded all notes
         if (currentCount >= totalCount)
         {
@@ -597,9 +610,9 @@ public class HomeController : Controller
         _notes.RemoveAll(x => x.Id == id);
 
         // update counts
-            var countsHtml = _notes.Count == 0
-                ? $"<p id=\"total-count\">No more notes</p><button id=\"load-more-btn\" data-on:click=\"@get('/Home/DeleteRowReset')\" class=\"button\">Reset</button>"
-                : $"<p id=\"total-count\">Showing {_notes.Count} notes</p>";
+        var countsHtml = _notes.Count == 0
+            ? $"<p id=\"total-count\">No more notes</p><button id=\"load-more-btn\" data-on:click=\"@get('/Home/DeleteRowReset')\" class=\"button\">Reset</button>"
+            : $"<p id=\"total-count\">Showing {_notes.Count} notes</p>";
         await SseHelper.SendServerSentEventAsync(Response, countsHtml);
 
         // Send a Datastar remove fragment event
