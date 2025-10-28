@@ -5,258 +5,279 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description"
-          content="Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
+        content="Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
     <meta name="color-scheme" content="light dark" />
     <link rel="stylesheet" href="/css/reset.css" />
     <link rel="stylesheet" href="/css/styles.css" />
-    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
+    <script type="module"
+        src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.6/bundles/datastar.js"></script>
     <title>ASP.NET Core Examples with Datastar - Datastar is The Hypermedia Framework</title>
     <link rel="icon" type="image/x-icon" href="/favicon.ico">
 </head>
 
 <body>
-<div class="container">
-    <!-- Header -->
-    <header>
-        <div class="header-top">
-            <div class="header-images">
-                <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
-                    <img src="/img/rocket.webp" alt="Datastar logo">
-                </a>
-                <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
-                   aria-label="Visit Rick's GitHub profile">
-                    <img src="/img/rick.jpg" alt="Author profile" class="profile">
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-top">
+                <div class="header-images">
+                    <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
+                        <img src="/img/rocket.webp" alt="Datastar logo">
+                    </a>
+                    <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank"
+                        aria-label="Visit Rick's GitHub profile">
+                        <img src="/img/rick.jpg" alt="Author profile" class="profile">
+                    </a>
+                </div>
+                <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
+                    <h1>ASP.NET Core Examples with Datastar</h1>
                 </a>
             </div>
-            <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
-                <h1>ASP.NET Core Examples with Datastar</h1>
-            </a>
-        </div>
-        <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
-        <a href="/#examples" class="button">GO TO EXAMPLES</a>
-    </header>
-    <!-- ./ Header -->
+            <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
+            <a href="/#examples" class="button">GO TO EXAMPLES</a>
+        </header>
+        <!-- ./ Header -->
 
-    <!-- Main -->
-    <main id="main-content">
-        <section id="what-is-datastar">
-            <h2>
-                What is Datastar?
-            </h2>
-            <p>Datastar is a lightweight hypermedia framework that brings reactive functionality to server-rendered
-                applications. It combines the best of both worlds:</p>
-            <ul>
-                <li>The simplicity and reliability of server-side rendering</li>
-                <li>The dynamic, reactive user experience in the style of a Single Page Application (SPA) but with very little to no JavaScript
-                </li>
-            </ul>
-        </section>
-        <section id="project-status">
-            <h2>
-                Project Status
-            </h2>
-            <p>These ASP.NET Core Examples with Datastar are currently in development. The project is open source and
-                contributions are welcome.</p>
-            <ul>
-                <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/Mvc" target="_blank">ASP.NET Core Web App (Model-View-Controller)</a></li>
-                <li><span style="color:red">not working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/RazorPages" target="_blank">ASP.NET Core Web App (Razor Pages) > can't get Active Search or Progress Bar to work with Datastar</a></li>
-                <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/MinimalApi" target="_blank">ASP.NET Core Minimal API</a></li>
-                <li><span style="color:yellow">not setup yet</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/FastEndpoints" target="_blank">FastEndpoints is alternative to Minimal APIs & MVC</a>
-                </li>
-            </ul>
-        </section>
-        <section id="benefits">
-            <h2>Datastar Benefits</h2>
-            <h3>Say Goodbye to Full Page Refreshes</h3>
-            <p>The dreaded full page refresh is a thing of the past with Datastar - enjoy smooth, partial updates that keep
-                your users in flow</p>
+        <!-- Main -->
+        <main id="main-content">
+            <section id="what-is-datastar">
+                <h2>
+                    What is Datastar?
+                </h2>
+                <p>Datastar is a lightweight hypermedia framework that brings reactive functionality to server-rendered
+                    applications. It combines the best of both worlds:</p>
+                <ul>
+                    <li>The simplicity and reliability of server-side rendering</li>
+                    <li>The dynamic, reactive user experience in the style of a Single Page Application (SPA) but with
+                        very little to no JavaScript
+                    </li>
+                </ul>
+            </section>
+            <section id="project-status">
+                <h2>
+                    Project Status
+                </h2>
+                <p>These ASP.NET Core Examples with Datastar are currently in development. The project is open source
+                    and
+                    contributions are welcome.</p>
+                <ul>
+                    <li><span style="color:green">working</span>&nbsp;<a
+                            href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/Mvc"
+                            target="_blank">ASP.NET Core MVC</a></li>
+                    <li><span style="color:green">working</span>&nbsp;<a
+                            href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/RazorPages"
+                            target="_blank">ASP.NET Core Razor Pages</a></li>
+                    <li><span style="color:green">working</span>&nbsp;<a
+                            href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/MinimalApi"
+                            target="_blank">ASP.NET Core Minimal APIs</a></li>
+                </ul>
+            </section>
+            <section id="benefits">
+                <h2>Datastar Benefits</h2>
+                <h3>Say Goodbye to Full Page Refreshes</h3>
+                <p>The dreaded full page refresh is a thing of the past with Datastar - enjoy smooth, partial updates
+                    that keep
+                    your users in flow</p>
 
-            <h3>Build Like a Pro, Code Like a Beginner</h3>
-            <p>Create sophisticated, reactive web applications without wrestling with complex state management of some JavaScript
-                frameworks</p>
+                <h3>Build Like a Pro, Code Like a Beginner</h3>
+                <p>Create sophisticated, reactive web applications without wrestling with complex state management of
+                    some JavaScript
+                    frameworks</p>
 
-            <h3>Your Server, Your Rules</h3>
-            <p>Keep all your business logic where it belongs - on the server. No more duplicating validation rules or
-                business logic in JavaScript</p>
+                <h3>Your Server, Your Rules</h3>
+                <p>Keep all your business logic where it belongs - on the server. No more duplicating validation rules
+                    or
+                    business logic in JavaScript</p>
 
-            <h3>Instant Feedback</h3>
-            <p>Create responsive interfaces that feel like native apps - type in a search box and watch results filter
-                instantly, all without complex client-side code</p>
+                <h3>Instant Feedback</h3>
+                <p>Create responsive interfaces that feel like native apps - type in a search box and watch results
+                    filter
+                    instantly, all without complex client-side code</p>
 
-            <h3>Learn Once, Build Anything</h3>
-            <p>If you can build a traditional web page, you can build reactive applications. No need to learn Redux, React,
-                or complex state management patterns</p>
+                <h3>Learn Once, Build Anything</h3>
+                <p>If you can build a traditional web page, you can build reactive applications. No need to learn Redux,
+                    React,
+                    or complex state management patterns</p>
 
-            <h3>Focus on Features, Not Plumbing • Spend your time building features</h3>
-            <p>Spend your time building features users love instead of managing state, writing JavaScript, or debugging
-                client-server communication</p>
+                <h3>Focus on Features, Not Plumbing • Spend your time building features</h3>
+                <p>Spend your time building features users love instead of managing state, writing JavaScript, or
+                    debugging
+                    client-server communication</p>
 
-            <h3>Real-Time Magic</h3>
-            <p>Update multiple parts of your page instantly - imagine a chat application where messages, user lists, and
-                notifications all update in real-time without writing a single line of JavaScript</p>
-        </section>
-        <section id="why-use-datastar">
-            <h2>
-                Why use Datastar?
-            </h2>
-            <ul>
-                <li>Minimal JavaScript • Just include a single 13.3 KiB file - smaller than Alpine.js and HTMX combined</li>
-                <li>HATEOAS Compliant • The only JavaScript you need is the library itself - no additional client-side code
-                    required
-                </li>
-                <li>Server Technology Agnostic • Write your backend in any language</li>
-                <li>Real-time Updates • Utilizes server-sent events for fast, responsive experiences</li>
-            </ul>
-        </section>
-        <section id="examples">
-            <h2>Datastar Examples</h2>
-            <p>PORTED HTMX EXAMPLES</p>
+                <h3>Real-Time Magic</h3>
+                <p>Update multiple parts of your page instantly - imagine a chat application where messages, user lists,
+                    and
+                    notifications all update in real-time without writing a single line of JavaScript</p>
+            </section>
+            <section id="why-use-datastar">
+                <h2>
+                    Why use Datastar?
+                </h2>
+                <ul>
+                    <li>Minimal JavaScript • Just include a single 13.3 KiB file - smaller than Alpine.js and HTMX
+                        combined</li>
+                    <li>HATEOAS Compliant • The only JavaScript you need is the library itself - no additional
+                        client-side code
+                        required
+                    </li>
+                    <li>Server Technology Agnostic • Write your backend in any language</li>
+                    <li>Real-time Updates • Utilizes server-sent events for fast, responsive experiences</li>
+                </ul>
+            </section>
+            <section id="examples">
+                <h2>Datastar Examples</h2>
+                <p>PORTED HTMX EXAMPLES</p>
 
-            <h3>
-                <span class="status-icon complete" title="Complete">✓</span>
-                ACTIVE SEARCH
-            </h3>
-            <p>This example actively searches a notes database as the user enters text</p>
-            <a href="activesearch.html">View Example →</a>
+                <h3>
+                    <span class="status-icon complete" title="Complete">✓</span>
+                    ACTIVE SEARCH
+                </h3>
+                <p>This example actively searches a notes database as the user enters text</p>
+                <a href="activesearch.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                ANIMATIONS
-            </h3>
-            <p>Use CSS transitions to add smooth animations and transitions to your web page</p>
-            <a href="animations.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    ANIMATIONS
+                </h3>
+                <p>Use CSS transitions to add smooth animations and transitions to your web page</p>
+                <a href="animations.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                BULK UPDATE
-            </h3>
-            <p>This example shows how to implement a common pattern where rows are selected and then bulk updated.</p>
-            <a href="bulkupdate.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    BULK UPDATE
+                </h3>
+                <p>This example shows how to implement a common pattern where rows are selected and then bulk updated.
+                </p>
+                <a href="bulkupdate.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                CLICK TO EDIT
-            </h3>
-            <p>The click to edit pattern provides a way to offer inline editing of all or part of a record without a page
-                refresh</p>
-            <a href="clickToedit.html">View Example →</a>
+                <h3>
+                    <span class="status-icon complete" title="Complete">✓</span>
+                    CLICK TO EDIT
+                </h3>
+                <p>The click to edit pattern provides a way to offer inline editing of all or part of a record without a
+                    page
+                    refresh</p>
+                <a href="clickToedit.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                CLICK TO LOAD
-            </h3>
-            <p>This example shows how to implement click-to-load the next page in a table of data</p>
-            <a href="clicktoload.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    CLICK TO LOAD
+                </h3>
+                <p>This example shows how to implement click-to-load the next page in a table of data</p>
+                <a href="clicktoload.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                DELETE ROW
-            </h3>
-            <p>This example shows how to implement a delete button that removes a table row upon completion</p>
-            <a href="deleterow.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    DELETE ROW
+                </h3>
+                <p>This example shows how to implement a delete button that removes a table row upon completion</p>
+                <a href="deleterow.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                DIALOGS BROWSER
-            </h3>
-            <p>Dialogs can be triggered with the standard browser prompt and confirm within an expression</p>
-            <a href="dialogsbrowser".html>View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    DIALOGS BROWSER
+                </h3>
+                <p>Dialogs can be triggered with the standard browser prompt and confirm within an expression</p>
+                <a href="dialogsbrowser" .html>View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                EDIT ROW
-            </h3>
-            <p>This example shows how to implement editable rows</p>
-            <a ahref="editrow.html">→ View Example</a>&nbsp;<a href="https://data-star.dev/examples/edit_row"
-                                                                                     target="_blank">→ View Datastar Example</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    EDIT ROW
+                </h3>
+                <p>This example shows how to implement editable rows</p>
+                <a ahref="editrow.html">→ View Example</a>&nbsp;<a href="https://data-star.dev/examples/edit_row"
+                    target="_blank">→ View Datastar Example</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                FILE UPLOAD
-            </h3>
-            <p>In this example we show how to create a file upload form that will be submitted via fetch</p>
-            <a href="fileupload.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    FILE UPLOAD
+                </h3>
+                <p>In this example we show how to create a file upload form that will be submitted via fetch</p>
+                <a href="fileupload.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon pending" title="In Progress">✓</span>
-                INDICATOR
-            </h3>
-            <p>Show a loading indicator</p>
-            <a href="indicator.html">View Example →</a>
+                <h3>
+                    <span class="status-icon pending" title="In Progress">✓</span>
+                    INDICATOR
+                </h3>
+                <p>Show a loading indicator</p>
+                <a href="indicator.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                INFINITE SCROLL
-            </h3>
-            <p>The infinite scroll pattern provides a way to load content dynamically on user scrolling action</p>
-            <a href="infinitescroll.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    INFINITE SCROLL
+                </h3>
+                <p>The infinite scroll pattern provides a way to load content dynamically on user scrolling action</p>
+                <a href="infinitescroll.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                INLINE VALIDATION
-            </h3>
-            <p>This example shows how to do inline field validation</p>
-            <a href="inlinevalidation.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    INLINE VALIDATION
+                </h3>
+                <p>This example shows how to do inline field validation</p>
+                <a href="inlinevalidation.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                LAZY LOAD
-            </h3>
-            <p>The data-indicator attribute accepts the name of a signal whose value is set to true when a fetch request
-                initiated from the same element is in progress, otherwise false. If the signal does not exist in the
-                signals,
-                it will be added.</p>
-            <a href="lazyload.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    LAZY LOAD
+                </h3>
+                <p>The data-indicator attribute accepts the name of a signal whose value is set to true when a fetch
+                    request
+                    initiated from the same element is in progress, otherwise false. If the signal does not exist in the
+                    signals,
+                    it will be added.</p>
+                <a href="lazyload.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                LAZY TABS
-            </h3>
-            <p>Shows how easy it is to implement tabs using Datastar</p>
-            <a href="lazytabs.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    LAZY TABS
+                </h3>
+                <p>Shows how easy it is to implement tabs using Datastar</p>
+                <a href="lazytabs.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon complete" title="Complete">✓</span>
-                PROGRESS BAR
-            </h3>
-            <p>This example shows how to implement an updating progress graphic</p>
-            <a href="progressbar.html">View Example →</a>
+                <h3>
+                    <span class="status-icon complete" title="Complete">✓</span>
+                    PROGRESS BAR
+                </h3>
+                <p>This example shows how to implement an updating progress graphic</p>
+                <a href="progressbar.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                SORTABLE
-            </h3>
-            <p>In the original example you had to hook into HTMX's events. With Datastar, you can easily listen for custom
-                events using data-on-*, and update signals to effect change</p>
-            <a href="sortable.html">View Example →</a>
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    SORTABLE
+                </h3>
+                <p>In the original example you had to hook into HTMX's events. With Datastar, you can easily listen for
+                    custom
+                    events using data-on-*, and update signals to effect change</p>
+                <a href="sortable.html">View Example →</a>
 
-            <h3>
-                <span class="status-icon todo" title="Not Started">✗</span>
-                VALUE SELECT
-            </h3>
-            <p>In this example we show how to make the values in one select depend on the value selected in another select.
-            </p>
-            <a href="valueselect.html">View Example →</a>
-        </section>
-    </main>
-    <!-- ./Main -->
+                <h3>
+                    <span class="status-icon todo" title="Not Started">✗</span>
+                    VALUE SELECT
+                </h3>
+                <p>In this example we show how to make the values in one select depend on the value selected in another
+                    select.
+                </p>
+                <a href="valueselect.html">View Example →</a>
+            </section>
+        </main>
+        <!-- ./Main -->
 
-    <!-- Footer -->
-    <footer>
-        <small>
-            <p>
-                Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
-                    href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
-                    href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
-                    href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
-                    href="https://data-star.dev" target="_blank">Datastar</a> • <a
-                    href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
-                Core</a>
-            </p>
-        </small>
-    </footer>
-    <!-- ./ Footer -->
-</div>
+        <!-- Footer -->
+        <footer>
+            <small>
+                <p>
+                    Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a
+                        href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a
+                        href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a
+                        href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a
+                        href="https://data-star.dev" target="_blank">Datastar</a> • <a
+                        href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET
+                        Core</a>
+                </p>
+            </small>
+        </footer>
+        <!-- ./ Footer -->
+    </div>
 </body>
 
 </html>

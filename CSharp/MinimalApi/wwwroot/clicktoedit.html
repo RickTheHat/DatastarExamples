@@ -52,11 +52,31 @@
             
             <section id="example">
                 <h2>Click To Edit (Minimal API)</h2>
-                <p>Live data updates and streaming visualizations</p>
+                <p>Click on the Edit button below to inline edit the contact information.</p>
 
                 <div class="demo-content" role="region" aria-label="Demo visualization">
-                    <div style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 4px; text-align: center;">
-                        demo goes here
+                    <div id="demo">
+                        <p>First Name: <span id="display-first-name">John</span></p>
+                        <p>Last Name: <span id="display-last-name">Doe</span></p>
+                        <p>Email: <span id="display-email">joe@blow.com</span></p>
+                        <div role="group">
+                            <button
+                                class="button info"
+                                data-indicator:_fetching
+                                data-attr:disabled="$_fetching"
+                                data-on:click="@get('/api/clicktoedit/form')"
+                            >
+                                Edit
+                            </button>
+                            <button
+                                class="button warning"
+                                data-indicator:_fetching
+                                data-attr:disabled="$_fetching"
+                                data-on:click="@patch('/api/clicktoedit/reset')"
+                            >
+                                Reset
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -80,7 +100,7 @@
                 <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span> Active Search</a></li>
                 <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span> Animations</a></li>
                 <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk Update</a></li>
-                <li><a href="clicktoedit.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Edit</a></li>
+                <li><a href="clicktoedit.html"><span class="status-icon complete" title="Click to Edit">✓</span> Click to Edit</a></li>
                 <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Load</a></li>
                 <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete Row</a></li>
                 <li><a href="dialogsbrowser.html"><span class="status-icon todo" title="Not Started">✗</span> Dialogs Browser</a></li>

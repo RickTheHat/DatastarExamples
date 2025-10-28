@@ -164,29 +164,29 @@ public class HomeController : Controller
 
         // Return to display view
         var displayHtml = $@"
-<div id=""demo"">
-    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
-    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
-    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
-    <div role=""group"">
-        <button
-            class=""button info""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@get('/Home/ClickToEditForm')""
-        >
-            Edit
-        </button>
-        <button
-            class=""button warning""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@patch('/Home/ClickToEditReset')""
-        >
-            Reset
-        </button>
-    </div>
-</div>";
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/Home/ClickToEditForm')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/Home/ClickToEditReset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
 
         await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
     }
@@ -197,29 +197,29 @@ public class HomeController : Controller
 
         // Return to display view
         var displayHtml = $@"
-<div id=""demo"">
-    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
-    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
-    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
-    <div role=""group"">
-        <button
-            class=""button info""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@get('/Home/ClickToEditForm')""
-        >
-            Edit
-        </button>
-        <button
-            class=""button warning""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@patch('/Home/ClickToEditReset')""
-        >
-            Reset
-        </button>
-    </div>
-</div>";
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/Home/ClickToEditForm')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/Home/ClickToEditReset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
 
         await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
     }
@@ -234,29 +234,29 @@ public class HomeController : Controller
 
         // Return to display view
         var displayHtml = $@"
-<div id=""demo"">
-    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
-    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
-    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
-    <div role=""group"">
-        <button
-            class=""button info""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@get('/Home/ClickToEditForm')""
-        >
-            Edit
-        </button>
-        <button
-            class=""button warning""
-            data-indicator:_fetching
-            data-attr:disabled=""$_fetching""
-            data-on:click=""@patch('/Home/ClickToEditReset')""
-        >
-            Reset
-        </button>
-    </div>
-</div>";
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/Home/ClickToEditForm')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/Home/ClickToEditReset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
 
         await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
     }

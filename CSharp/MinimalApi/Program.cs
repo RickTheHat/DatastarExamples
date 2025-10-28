@@ -1,6 +1,7 @@
 // Global variables
 
 using Bogus;
+using System.Text.Json;
 using Microsoft.Extensions.FileProviders;
 using MinimalAPI.Models;
 using MinimalAPI.Helpers;
@@ -8,6 +9,10 @@ using MinimalAPI.Helpers;
 var random = new Random();
 List<Note> notes = null;
 var totalNoteCount = 0;
+
+// Click to Edit state
+var currentContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+var originalContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -199,6 +204,198 @@ app.MapGet("/api/progress", async context =>
     {
         // TODO - Implement reset progress bar
     }
+});
+
+// Click to Edit endpoints
+app.MapGet("/api/clicktoedit/form", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Return the edit form with current contact data
+    var editFormHtml = $@"
+        <div id=""demo"" style=""display: flex; flex-direction: column; gap: 1rem;"">
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                First Name
+                <input
+                    type=""text""
+                    data-bind:first-name
+                    value=""{currentContact.FirstName}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                Last Name
+                <input
+                    type=""text""
+                    data-bind:last-name
+                    value=""{currentContact.LastName}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <label style=""display: flex; flex-direction: column; gap: 0.5rem;"">
+                Email
+                <input
+                    type=""email""
+                    data-bind:email
+                    value=""{currentContact.Email}""
+                    data-attr:disabled=""$_fetching""
+                    style=""padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
+                >
+            </label>
+            <div role=""group"" style=""display: flex; gap: 1rem;"">
+                <button
+                    class=""button success""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@put('/api/clicktoedit/save')""
+                >
+                    Save
+                </button>
+                <button
+                    class=""button error""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/api/clicktoedit/cancel')""
+                >
+                    Cancel
+                </button>
+            </div>
+        </div>";
+
+    await SseHelper.SendServerSentEventAsync(context.Response, editFormHtml, "#demo");
+});
+
+app.MapPut("/api/clicktoedit/save", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+
+    try
+    {
+        // Parse the signals JSON to extract contact data
+        var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+
+        if (signalData != null)
+        {
+            if (signalData.TryGetValue("firstName", out var firstName) && firstName != null)
+            {
+                currentContact.FirstName = firstName.ToString() ?? currentContact.FirstName;
+            }
+            if (signalData.TryGetValue("lastName", out var lastName) && lastName != null)
+            {
+                currentContact.LastName = lastName.ToString() ?? currentContact.LastName;
+            }
+            if (signalData.TryGetValue("email", out var email) && email != null)
+            {
+                currentContact.Email = email.ToString() ?? currentContact.Email;
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error parsing signals: {ex.Message}");
+    }
+
+    // Return to display view
+    var displayHtml = $@"
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/api/clicktoedit/form')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/api/clicktoedit/reset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
+
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
+});
+
+app.MapGet("/api/clicktoedit/cancel", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Return to display view
+    var displayHtml = $@"
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/api/clicktoedit/form')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/api/clicktoedit/reset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
+
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
+});
+
+app.MapPatch("/api/clicktoedit/reset", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Reset to original contact data
+    currentContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+
+    // Return to display view
+    var displayHtml = $@"
+        <div id=""demo"">
+            <p>First Name: <span id=""display-first-name"">{currentContact.FirstName}</span></p>
+            <p>Last Name: <span id=""display-last-name"">{currentContact.LastName}</span></p>
+            <p>Email: <span id=""display-email"">{currentContact.Email}</span></p>
+            <div role=""group"">
+                <button
+                    class=""button info""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@get('/api/clicktoedit/form')""
+                >
+                    Edit
+                </button>
+                <button
+                    class=""button warning""
+                    data-indicator:_fetching
+                    data-attr:disabled=""$_fetching""
+                    data-on:click=""@patch('/api/clicktoedit/reset')""
+                >
+                    Reset
+                </button>
+            </div>
+        </div>";
+
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
 });
 
 app.Run();
