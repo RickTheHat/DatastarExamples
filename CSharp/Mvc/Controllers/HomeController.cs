@@ -370,7 +370,7 @@ public class HomeController : Controller
 
         // Generate the entire table with the edit form for this row
         var tableHtml = GenerateContactsTable();
-        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table", "inner");
     }
 
     [HttpPatch]
@@ -394,7 +394,8 @@ public class HomeController : Controller
             {
                 var contact = _contacts[id];
                 
-                if (signalData.TryGetValue("name", out var name) && name != null)
+                // Look for name{id} signal
+                if (signalData.TryGetValue($"name{id}", out var name) && name != null)
                 {
                     var fullName = name.ToString()?.Split(' ', 2);
                     if (fullName?.Length == 2)
@@ -408,7 +409,8 @@ public class HomeController : Controller
                     }
                 }
                 
-                if (signalData.TryGetValue("email", out var email) && email != null)
+                // Look for email{id} signal
+                if (signalData.TryGetValue($"email{id}", out var email) && email != null)
                 {
                     contact.Email = email.ToString() ?? contact.Email;
                 }
@@ -423,7 +425,7 @@ public class HomeController : Controller
 
         // Return the updated table
         var tableHtml = GenerateContactsTable();
-        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table", "inner");
     }
 
     public async Task EditRowCancel(int id)
@@ -434,7 +436,7 @@ public class HomeController : Controller
 
         // Return the table in view mode
         var tableHtml = GenerateContactsTable();
-        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table", "inner");
     }
 
     public async Task EditRowReset()
@@ -453,7 +455,7 @@ public class HomeController : Controller
 
         // Return the reset table
         var tableHtml = GenerateContactsTable();
-        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table");
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#contacts-table", "inner");
     }
 
     private string GenerateContactsTable()
@@ -468,38 +470,36 @@ public class HomeController : Controller
             {
                 // Edit mode row
                 rows.AppendLine($@"
-                    <tr id=""contact-{i}"" style=""border-bottom: 1px solid #ddd;"">
-                        <td style=""padding: 0.75rem;"">
+                    <tr id=""contact-{i}"">
+                        <td>
                             <input 
                                 type=""text"" 
-                                data-bind:name
+                                data-bind:name{i}
                                 value=""{contact.FirstName} {contact.LastName}""
-                                style=""width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
                             >
                         </td>
-                        <td style=""padding: 0.75rem;"">
+                        <td>
                             <input 
                                 type=""email"" 
-                                data-bind:email
+                                data-bind:email{i}
                                 value=""{contact.Email}""
-                                style=""width: 100%; padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;""
                             >
                         </td>
-                        <td style=""padding: 0.75rem; display: flex; gap: 0.5rem;"">
-                            <button 
-                                class=""button success""
-                                data-on:click=""@patch('/Home/EditRowSave?id={i}')""
-                                style=""padding: 0.5rem 1rem; background-color: #4CAF50; color: white; border: none; border-radius: 4px; cursor: pointer;""
-                            >
-                                Save
-                            </button>
-                            <button 
-                                class=""button error""
-                                data-on:click=""@get('/Home/EditRowCancel?id={i}')""
-                                style=""padding: 0.5rem 1rem; background-color: #f44336; color: white; border: none; border-radius: 4px; cursor: pointer;""
-                            >
-                                Cancel
-                            </button>
+                        <td>
+                            <div class=""edit-row-actions"">
+                                <button 
+                                    class=""button success""
+                                    data-on:click=""@patch('/Home/EditRowSave?id={i}')""
+                                >
+                                    Save
+                                </button>
+                                <button 
+                                    class=""button error""
+                                    data-on:click=""@get('/Home/EditRowCancel?id={i}')""
+                                >
+                                    Cancel
+                                </button>
+                            </div>
                         </td>
                     </tr>");
             }
@@ -507,14 +507,13 @@ public class HomeController : Controller
             {
                 // View mode row
                 rows.AppendLine($@"
-                    <tr id=""contact-{i}"" style=""border-bottom: 1px solid #ddd;"">
-                        <td style=""padding: 0.75rem;"">{contact.FirstName} {contact.LastName}</td>
-                        <td style=""padding: 0.75rem;"">{contact.Email}</td>
-                        <td style=""padding: 0.75rem;"">
+                    <tr id=""contact-{i}"">
+                        <td>{contact.FirstName} {contact.LastName}</td>
+                        <td>{contact.Email}</td>
+                        <td>
                             <button 
                                 class=""button info""
                                 data-on:click=""@get('/Home/EditRowForm?id={i}')""
-                                style=""padding: 0.5rem 1rem; background-color: #0066cc; color: white; border: none; border-radius: 4px; cursor: pointer;""
                                 {(_editingContactId.HasValue && _editingContactId != i ? "disabled" : "")}
                             >
                                 Edit
