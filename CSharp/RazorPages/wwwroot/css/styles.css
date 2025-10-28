@@ -545,11 +545,6 @@ section h3 {
     transform: translateY(0);
 }
 
-/* Remove any old button container styles */
-.button-container {
-    /* Remove this class if it exists */
-}
-
 /* Example navigation buttons */
 .example-nav {
     display: flex;
@@ -790,4 +785,126 @@ h2:hover .header-anchor::after {
     height: 0px;
     overflow: hidden;
     transition: opacity 1s ease-out;
+}
+
+/* Edit Row table styles */
+.edit-row-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+}
+
+.edit-row-table thead {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-table th {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.edit-row-table td {
+    padding: 0.75rem;
+}
+
+.edit-row-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-table input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.edit-row-table input:focus {
+    outline: none;
+    border-color: #b39552;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.button.info {
+    background-color: #0066cc;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.info:hover {
+    background-color: #0052a3;
+}
+
+.button.success {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.success:hover {
+    background-color: #45a049;
+}
+
+.button.error {
+    background-color: #f44336;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.error:hover {
+    background-color: #da190b;
+}
+
+.button.warning {
+    background-color: #ff9800;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+}
+
+.button.warning:hover {
+    background-color: #e68900;
+}
+
+.reset-button-container {
+    margin-top: 1rem;
+}
+
+/* Mobile adjustments for edit row table */
+@media (max-width: 768px) {
+    .edit-row-table {
+        font-size: 0.9rem;
+    }
+
+    .edit-row-table th,
+    .edit-row-table td {
+        padding: 0.5rem;
+    }
+
+    .edit-row-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .button.info,
+    .button.success,
+    .button.error,
+    .button.warning {
+        width: 100%;
+        text-align: center;
+    }
 }

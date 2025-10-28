@@ -3,6 +3,12 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Configure antiforgery to allow PATCH requests
+builder.Services.AddAntiforgery(options => 
+{
+    options.SuppressXFrameOptionsHeader = false;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

@@ -16,10 +16,76 @@
 
     <section id="example">
         <h2>Edit Row (ASP.NET Razor Pages)</h2>
-        <p>Edit row demonstration will go here...</p>
+        <p>Click the "Edit" button on any row to make it editable. Use "Save" to persist changes or "Cancel" to discard them.</p>
+
         <div class="demo-content" role="region" aria-label="Demo visualization">
-            <div style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 4px; text-align: center;">
-                demo goes here
+            <table class="edit-row-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="contacts-table">
+                    <tr id="contact-0">
+                        <td>Joe Smith</td>
+                        <td>joe@@smith.org</td>
+                        <td>
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('?handler=EditRowForm&id=0')"
+                                type="button"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-1">
+                        <td>Angie MacDowell</td>
+                        <td>angie@@macdowell.org</td>
+                        <td>
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('?handler=EditRowForm&id=1')"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-2">
+                        <td>Fuqua Tarkenton</td>
+                        <td>fuqua@@tarkenton.org</td>
+                        <td>
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('?handler=EditRowForm&id=2')"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                    <tr id="contact-3">
+                        <td>Kim Yee</td>
+                        <td>kim@@yee.org</td>
+                        <td>
+                            <button 
+                                class="button info"
+                                data-on:click="@@get('?handler=EditRowForm&id=3')"
+                            >
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="reset-button-container">
+                <button 
+                    class="button warning"
+                    data-on:click="@@get('?handler=EditRowReset')"
+                >
+                    Reset
+                </button>
             </div>
         </div>
     </section>
