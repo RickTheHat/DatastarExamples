@@ -11,6 +11,8 @@ public class HomeController : Controller
 {
     private static List<Note> _notes;
     private static int _totalNoteCount;
+    private static Contact _currentContact = new() { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+    private static Contact _originalContact = new() { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
     private readonly Random _random = new();
 
     public IActionResult Index()
@@ -60,6 +62,212 @@ public class HomeController : Controller
     public IActionResult ClickToEdit()
     {
         return View();
+    }
+
+    public async Task ClickToEditForm()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+        
+        // Return the edit form with current contact data
+        var editFormHtml = $@"
+<div id=""demo"">
+    <label>
+        First Name
+        <input
+            type=""text""
+            data-bind:first-name
+            value=""{_currentContact.FirstName}""
+            data-attr:disabled=""$_fetching""
+        >
+    </label>
+    <label>
+        Last Name
+        <input
+            type=""text""
+            data-bind:last-name
+            value=""{_currentContact.LastName}""
+            data-attr:disabled=""$_fetching""
+        >
+    </label>
+    <label>
+        Email
+        <input
+            type=""email""
+            data-bind:email
+            value=""{_currentContact.Email}""
+            data-attr:disabled=""$_fetching""
+        >
+    </label>
+    <div role=""group"">
+        <button
+            class=""button success""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@put('/Home/ClickToEditSave')""
+        >
+            Save
+        </button>
+        <button
+            class=""button error""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@get('/Home/ClickToEditCancel')""
+        >
+            Cancel
+        </button>
+    </div>
+</div>";
+        
+        await SseHelper.SendServerSentEventAsync(Response, editFormHtml, "#demo");
+    }
+
+    [HttpPut]
+    public async Task ClickToEditSave()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+        
+        // Parse the signals to extract contact data
+        var signalData = JsonSerializer.Deserialize<JsonElement>(body);
+        
+        if (signalData.TryGetProperty("firstName", out var firstNameElement))
+        {
+            _currentContact.FirstName = firstNameElement.GetString() ?? _currentContact.FirstName;
+        }
+        if (signalData.TryGetProperty("lastName", out var lastNameElement))
+        {
+            _currentContact.LastName = lastNameElement.GetString() ?? _currentContact.LastName;
+        }
+        if (signalData.TryGetProperty("email", out var emailElement))
+        {
+            _currentContact.Email = emailElement.GetString() ?? _currentContact.Email;
+        }
+
+        // Sanitize the values (simple profanity filter for demo)
+        _currentContact.FirstName = SanitizeInput(_currentContact.FirstName);
+        _currentContact.LastName = SanitizeInput(_currentContact.LastName);
+
+        // Return to display view
+        var displayHtml = $@"
+<div id=""demo"">
+    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+    <div role=""group"">
+        <button
+            class=""button info""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@get('/Home/ClickToEditForm')""
+        >
+            Edit
+        </button>
+        <button
+            class=""button warning""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@patch('/Home/ClickToEditReset')""
+        >
+            Reset
+        </button>
+    </div>
+</div>";
+
+        await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
+    }
+
+    public async Task ClickToEditCancel()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        // Return to display view
+        var displayHtml = $@"
+<div id=""demo"">
+    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+    <div role=""group"">
+        <button
+            class=""button info""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@get('/Home/ClickToEditForm')""
+        >
+            Edit
+        </button>
+        <button
+            class=""button warning""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@patch('/Home/ClickToEditReset')""
+        >
+            Reset
+        </button>
+    </div>
+</div>";
+
+        await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
+    }
+
+    [HttpPatch]
+    public async Task ClickToEditReset()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        // Reset to original contact data
+        _currentContact = new() { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+
+        // Return to display view
+        var displayHtml = $@"
+<div id=""demo"">
+    <p>First Name: <span id=""display-first-name"">{_currentContact.FirstName}</span></p>
+    <p>Last Name: <span id=""display-last-name"">{_currentContact.LastName}</span></p>
+    <p>Email: <span id=""display-email"">{_currentContact.Email}</span></p>
+    <div role=""group"">
+        <button
+            class=""button info""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@get('/Home/ClickToEditForm')""
+        >
+            Edit
+        </button>
+        <button
+            class=""button warning""
+            data-indicator:_fetching
+            data-attr:disabled=""$_fetching""
+            data-on:click=""@@patch('/Home/ClickToEditReset')""
+        >
+            Reset
+        </button>
+    </div>
+</div>";
+
+        await SseHelper.SendServerSentEventAsync(Response, displayHtml, "#demo");
+    }
+
+    private static string SanitizeInput(string input)
+    {
+        if (string.IsNullOrEmpty(input))
+            return input;
+
+        // Simple profanity filter - replace common profanity with asterisks
+        var profanityList = new[] { "badword1", "badword2" };
+        var result = input;
+        
+        foreach (var word in profanityList)
+        {
+            result = System.Text.RegularExpressions.Regex.Replace(
+                result,
+                word,
+                new string('*', word.Length),
+                System.Text.RegularExpressions.RegexOptions.IgnoreCase
+            );
+        }
+
+        return result;
     }
 
     public IActionResult ClickToLoad()
