@@ -6,9 +6,13 @@ public static class SseHelper
 {
     public static async Task SetSseHeadersAsync(HttpResponse response)
     {
-        response.Headers.Append("Cache-Control", "no-cache");
-        response.Headers.Append("Content-Type", "text/event-stream");
-        response.Headers.Append("Connection", "keep-alive");
+        // Only set headers if the response hasn't started yet
+        if (!response.HasStarted)
+        {
+            response.Headers.Append("Cache-Control", "no-cache");
+            response.Headers.Append("Content-Type", "text/event-stream");
+            response.Headers.Append("Connection", "keep-alive");
+        }
         await response.Body.FlushAsync();
     }
 
