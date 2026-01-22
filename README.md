@@ -5,7 +5,7 @@
 2. [Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) > *examples partially finished*
 3. [Minimal API](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) > *examples partially finished*
 
-## MVC project [https://datastar.rickgraner.com](https://datastar.rickgraner.com)
+## MVC project [https://datastar.gridsixty.com](https://datastar.gridsixty.com)
 ![Active Search Demo](datastar-examples.png)  
 
 ## What is Datastar?
