@@ -60,13 +60,15 @@ public class HomeController : Controller
             };
         }
 
+        // showing current count
+        var _showingCurrentCount = _notes.Take(5).ToList();
+        ViewData["CurrentCount"] = _showingCurrentCount.Count;
+
+        // total note count
         _totalNoteCount = _notes.Count;
         ViewData["TotalCount"] = _totalNoteCount;
 
-        var displayNotes = _notes.Take(5).ToList();
-        ViewData["CurrentCount"] = displayNotes.Count;
-
-        return View(displayNotes);
+        return View(_showingCurrentCount);
     }
 
     public IActionResult Animations()
@@ -619,6 +621,7 @@ public class HomeController : Controller
         var countsHtml = filteredNotes.Count == 0
             ? $"<p id=\"total-count\">No results found out of {_totalNoteCount} notes</p>"
             : $"<p id=\"total-count\">Showing {filteredNotes.Count} of {_totalNoteCount} notes</p>";
+        
         await SseHelper.SendServerSentEventAsync(Response, countsHtml);
 
         var notesListHtml = "<div id=\"notes-list\" class=\"notes-list\">";
