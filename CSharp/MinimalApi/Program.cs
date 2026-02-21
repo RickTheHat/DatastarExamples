@@ -10,6 +10,9 @@ var random = new Random();
 List<Note> notes = null;
 var totalNoteCount = 0;
 
+// Bulk Update state
+List<User> users = null;
+
 // Click to Edit state
 var currentContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
 var originalContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
@@ -523,6 +526,160 @@ app.MapGet("/api/editrow/reset", async context =>
     var tableHtml = GenerateContactsTable();
     await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#contacts-table", "inner");
 });
+
+// Bulk Update endpoints
+app.MapGet("/api/bulkupdate/init", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Initialize users if not already done
+    if (users == null)
+    {
+        var userFaker = new Faker<User>()
+            .RuleFor(u => u.Id, f => f.IndexFaker)
+            .RuleFor(u => u.Name, f => f.Name.FullName())
+            .RuleFor(u => u.Email, f => f.Internet.Email())
+            .RuleFor(u => u.Status, f => f.Random.Bool() ? "Active" : "Inactive");
+
+        users = userFaker.Generate(4).ToList();
+    }
+
+    var tableHtml = GenerateBulkUpdateTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#bulk-update-table", "inner");
+});
+
+app.MapPut("/api/bulkupdate/activate", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Read signals from request body
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+    
+    var selectedIndices = new List<int>();
+    
+    try
+    {
+        var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+        if (signalData != null && signalData.TryGetValue("selections", out var selectionsObj))
+        {
+            if (selectionsObj is JsonElement selectionsElement)
+            {
+                var selections = JsonSerializer.Deserialize<List<bool>>(selectionsElement.GetRawText());
+                if (selections != null)
+                {
+                    for (int i = 0; i < selections.Count && i < users.Count; i++)
+                    {
+                        if (selections[i])
+                        {
+                            selectedIndices.Add(i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error parsing selections: {ex.Message}");
+    }
+
+    // Activate selected users
+    foreach (var index in selectedIndices)
+    {
+        if (index >= 0 && index < users.Count)
+        {
+            users[index].Status = "Active";
+        }
+    }
+
+    // Return updated table
+    var tableHtml = GenerateBulkUpdateTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#bulk-update-table", "inner");
+
+    // Clear selections after action
+    var clearSelections = $"{{\"selections\": [{string.Join(",", Enumerable.Repeat("false", users.Count))}], \"_all\": false}}";
+    await SseHelper.PatchSignalsAsync(context.Response, clearSelections);
+});
+
+app.MapPut("/api/bulkupdate/deactivate", async context =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+
+    // Read signals from request body
+    using var reader = new StreamReader(context.Request.Body);
+    var body = await reader.ReadToEndAsync();
+    
+    var selectedIndices = new List<int>();
+    
+    try
+    {
+        var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+        if (signalData != null && signalData.TryGetValue("selections", out var selectionsObj))
+        {
+            if (selectionsObj is JsonElement selectionsElement)
+            {
+                var selections = JsonSerializer.Deserialize<List<bool>>(selectionsElement.GetRawText());
+                if (selections != null)
+                {
+                    for (int i = 0; i < selections.Count && i < users.Count; i++)
+                    {
+                        if (selections[i])
+                        {
+                            selectedIndices.Add(i);
+                        }
+                    }
+                }
+            }
+        }
+    }
+    catch (Exception ex)
+    {
+        System.Diagnostics.Debug.WriteLine($"Error parsing selections: {ex.Message}");
+    }
+
+    // Deactivate selected users
+    foreach (var index in selectedIndices)
+    {
+        if (index >= 0 && index < users.Count)
+        {
+            users[index].Status = "Inactive";
+        }
+    }
+
+    // Return updated table
+    var tableHtml = GenerateBulkUpdateTable();
+    await SseHelper.SendServerSentEventAsync(context.Response, tableHtml, "#bulk-update-table", "inner");
+
+    // Clear selections after action
+    var clearSelections = $"{{\"selections\": [{string.Join(",", Enumerable.Repeat("false", users.Count))}], \"_all\": false}}";
+    await SseHelper.PatchSignalsAsync(context.Response, clearSelections);
+});
+
+string GenerateBulkUpdateTable()
+{
+    var rows = new System.Text.StringBuilder();
+
+    for (int i = 0; i < users.Count; i++)
+    {
+        var user = users[i];
+        rows.AppendLine($@"
+                <tr>
+                    <td>
+                        <input
+                            type=""checkbox""
+                            data-bind:selections
+                            data-attr:disabled=""$_fetching""
+                        />
+                    </td>
+                    <td>{user.Name}</td>
+                    <td>{user.Email}</td>
+                    <td>{user.Status}</td>
+                </tr>");
+    }
+
+    return rows.ToString();
+}
 
 app.Run();
 

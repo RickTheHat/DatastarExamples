@@ -52,11 +52,62 @@
             
             <section id="example">
                 <h2>Bulk Update (Minimal API)</h2>
-                <p>Live data updates and streaming visualizations</p>
+                <p>This example shows how to implement bulk updates. Select users via checkboxes and click Activate or Deactivate to update their status.</p>
 
                 <div class="demo-content" role="region" aria-label="Demo visualization">
-                    <div style="background: rgba(255, 255, 255, 0.05); padding: 2rem; border-radius: 4px; text-align: center;">
-                        demo goes here
+                    <div
+                        id="bulk-update-demo"
+                        data-signals__ifmissing="{_fetching: false, selections: [false, false, false, false]}"
+                        data-indicator:_fetching
+                        data-init="@get('/api/bulkupdate/init')"
+                    >
+                        <table class="edit-row-table bulk-update-table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <input
+                                            type="checkbox"
+                                            data-bind:_all
+                                            data-on:change="$selections = $selections.map(() => $_all)"
+                                            data-attr:disabled="$_fetching"
+                                        />
+                                    </th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody id="bulk-update-table">
+                                <tr>
+                                    <td>
+                                        <input
+                                            type="checkbox"
+                                            data-bind:selections
+                                            data-attr:disabled="$_fetching"
+                                        />
+                                    </td>
+                                    <td colspan="3">Loading...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="bulk-actions" role="group" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                            <button
+                                class="button success"
+                                data-on:click="@put('/api/bulkupdate/activate')"
+                                data-indicator:_fetching
+                                data-attr:disabled="$_fetching"
+                            >
+                                Activate
+                            </button>
+                            <button
+                                class="button error"
+                                data-on:click="@put('/api/bulkupdate/deactivate')"
+                                data-indicator:_fetching
+                                data-attr:disabled="$_fetching"
+                            >
+                                Deactivate
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -79,7 +130,7 @@
             <ul class="example-nav">
                 <li><a href="activesearch.html"><span class="status-icon complete" title="Example Complete">✓</span> Active Search</a></li>
                 <li><a href="animations.html"><span class="status-icon todo" title="Not Started">✗</span> Animations</a></li>
-                <li><a href="bulkupdate.html"><span class="status-icon todo" title="Not Started">✗</span> Bulk Update</a></li>
+                <li><a href="bulkupdate.html"><span class="status-icon complete" title="Example Complete">✓</span> Bulk Update</a></li>
                 <li><a href="clicktoedit.html"><span class="status-icon complete" title="Click to Edit">✓</span> Click to Edit</a></li>
                 <li><a href="clicktoload.html"><span class="status-icon todo" title="Not Started">✗</span> Click to Load</a></li>
                 <li><a href="deleterow.html"><span class="status-icon todo" title="Not Started">✗</span> Delete Row</a></li>
