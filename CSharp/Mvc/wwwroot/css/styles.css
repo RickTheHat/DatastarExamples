@@ -903,3 +903,24 @@ h2:hover .header-anchor::after {
         text-align: center;
     }
 }
+
+/* Bulk Update table styles */
+.bulk-update-table th:first-child,
+.bulk-update-table td:first-child {
+    width: 40px;
+    text-align: center;
+}
+
+.bulk-update-table input[type="checkbox"] {
+    width: auto;
+    cursor: pointer;
+    transform: scale(1.2);
+    margin: 0;
+}
+
+.bulk-actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: 1.5rem;
+    justify-content: flex-start;
+}

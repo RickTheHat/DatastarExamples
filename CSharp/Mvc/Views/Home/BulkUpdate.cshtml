@@ -1,3 +1,5 @@
+@model List<Mvc.Models.User>
+
 @{
     ViewData["Title"] = "Bulk Update (ASP.NET MVC)";
 }
@@ -14,9 +16,66 @@
 
     <section id="example">
         <h2>Bulk Update (ASP.NET MVC)</h2>
-        <p>Bulk update demonstration will go here...</p>
+        <p>This example shows how to implement bulk updates. Select users via checkboxes and click Activate or Deactivate to update their status.</p>
         <div class="demo-content" role="region" aria-label="Demo visualization">
-            demo goes here
+            <div
+                id="bulk-update-demo"
+                data-signals__ifmissing="{_fetching: false, selections: [@string.Join(", ", Enumerable.Repeat("false", Model.Count))]}"
+            >
+                <table class="edit-row-table bulk-update-table">
+                    <thead>
+                        <tr>
+                            <th>
+                                <input
+                                    type="checkbox"
+                                    data-bind:_all
+                                    data-on:change="$selections = $selections.map(() => $_all)"
+                                    data-attr:disabled="$_fetching"
+                                />
+                            </th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bulk-update-table">
+                        @for (int i = 0; i < Model.Count; i++)
+                        {
+                            var user = Model[i];
+                            <tr>
+                                <td>
+                                    <input
+                                        type="checkbox"
+                                        data-bind:selections
+                                        data-attr:disabled="$_fetching"
+                                    />
+                                </td>
+                                <td>@user.Name</td>
+                                <td>@user.Email</td>
+                                <td>@user.Status</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="bulk-actions" role="group" style="margin-top: 1rem; display: flex; gap: 0.5rem;">
+                    <button
+                        class="button success"
+                        data-on:click="@@put('/Home/BulkUpdateActivate')"
+                        data-indicator:_fetching
+                        data-attr:disabled="$_fetching"
+                    >
+                        Activate
+                    </button>
+                    <button
+                        class="button error"
+                        data-on:click="@@put('/Home/BulkUpdateDeactivate')"
+                        data-indicator:_fetching
+                        data-attr:disabled="$_fetching"
+                    >
+                        Deactivate
+                    </button>
+                </div>
+            </div>
         </div>
     </section>
 
@@ -28,6 +87,6 @@
             NEXT: CLICK TO EDIT →
         </a>
     </div>
-</div> 
+</div>
 
 @await Html.PartialAsync("_MoreExamples")

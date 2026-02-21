@@ -33,6 +33,10 @@ public class HomeController : Controller
     
     private static int? _editingContactId = null;
     
+    // Bulk Update users
+    private static List<User> _users = new();
+    private static List<User> _originalUsers = new();
+    
     private readonly Random _random = new();
 
     public IActionResult Index()
@@ -78,7 +82,27 @@ public class HomeController : Controller
 
     public IActionResult BulkUpdate()
     {
-        return View();
+        // Initialize users if not already done
+        if (_users.Count == 0)
+        {
+            var userFaker = new Faker<User>()
+                .RuleFor(u => u.Id, f => f.IndexFaker)
+                .RuleFor(u => u.Name, f => f.Name.FullName())
+                .RuleFor(u => u.Email, f => f.Internet.Email())
+                .RuleFor(u => u.Status, f => f.Random.Bool() ? "Active" : "Inactive");
+
+            _users = userFaker.Generate(4).ToList();
+            _originalUsers = _users.Select(u => new User 
+            { 
+                Id = u.Id, 
+                Name = u.Name, 
+                Email = u.Email, 
+                Status = u.Status 
+            }).ToList();
+        }
+
+        ViewData["UserCount"] = _users.Count;
+        return View(_users);
     }
 
     public IActionResult ClickToEdit()
@@ -842,6 +866,141 @@ public class HomeController : Controller
         }
         notesHtml += "</div>";
         await SseHelper.SendServerSentEventAsync(Response, notesHtml, "#notes-list");
+    }
+
+    [HttpPut]
+    public async Task BulkUpdateActivate()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        // Read signals from request body
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+        
+        var selectedIndices = new List<int>();
+        
+        try
+        {
+            var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+            if (signalData != null && signalData.TryGetValue("selections", out var selectionsObj))
+            {
+                if (selectionsObj is JsonElement selectionsElement)
+                {
+                    var selections = JsonSerializer.Deserialize<List<bool>>(selectionsElement.GetRawText());
+                    if (selections != null)
+                    {
+                        for (int i = 0; i < selections.Count && i < _users.Count; i++)
+                        {
+                            if (selections[i])
+                            {
+                                selectedIndices.Add(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error parsing selections: {ex.Message}");
+        }
+
+        // Activate selected users
+        foreach (var index in selectedIndices)
+        {
+            if (index >= 0 && index < _users.Count)
+            {
+                _users[index].Status = "Active";
+            }
+        }
+
+        // Return updated table
+        var tableHtml = GenerateBulkUpdateTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#bulk-update-table", "inner");
+
+        // Clear selections after action
+        var clearSelections = $"{{\"selections\": [{string.Join(",", Enumerable.Repeat("false", _users.Count))}], \"_all\": false}}";
+        await SseHelper.PatchSignalsAsync(Response, clearSelections);
+    }
+
+    [HttpPut]
+    public async Task BulkUpdateDeactivate()
+    {
+        await SseHelper.SetSseHeadersAsync(Response);
+
+        // Read signals from request body
+        using var reader = new StreamReader(Request.Body);
+        var body = await reader.ReadToEndAsync();
+        
+        var selectedIndices = new List<int>();
+        
+        try
+        {
+            var signalData = JsonSerializer.Deserialize<Dictionary<string, object>>(body);
+            if (signalData != null && signalData.TryGetValue("selections", out var selectionsObj))
+            {
+                if (selectionsObj is JsonElement selectionsElement)
+                {
+                    var selections = JsonSerializer.Deserialize<List<bool>>(selectionsElement.GetRawText());
+                    if (selections != null)
+                    {
+                        for (int i = 0; i < selections.Count && i < _users.Count; i++)
+                        {
+                            if (selections[i])
+                            {
+                                selectedIndices.Add(i);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"Error parsing selections: {ex.Message}");
+        }
+
+        // Deactivate selected users
+        foreach (var index in selectedIndices)
+        {
+            if (index >= 0 && index < _users.Count)
+            {
+                _users[index].Status = "Inactive";
+            }
+        }
+
+        // Return updated table
+        var tableHtml = GenerateBulkUpdateTable();
+        await SseHelper.SendServerSentEventAsync(Response, tableHtml, "#bulk-update-table", "inner");
+
+        // Clear selections after action
+        var clearSelections = $"{{\"selections\": [{string.Join(",", Enumerable.Repeat("false", _users.Count))}], \"_all\": false}}";
+        await SseHelper.PatchSignalsAsync(Response, clearSelections);
+    }
+
+    private string GenerateBulkUpdateTable()
+    {
+        var rows = new System.Text.StringBuilder();
+
+        for (int i = 0; i < _users.Count; i++)
+        {
+            var user = _users[i];
+            rows.AppendLine($@"
+                <tr>
+                    <td>
+                        <input
+                            type=""checkbox""
+                            data-bind:selections
+                            data-attr:disabled=""$_fetching""
+                        />
+                    </td>
+                    <td>{user.Name}</td>
+                    <td>{user.Email}</td>
+                    <td>{user.Status}</td>
+                </tr>");
+        }
+
+        return rows.ToString();
     }
 
     #endregion
