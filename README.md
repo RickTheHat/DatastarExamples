@@ -4,7 +4,7 @@
 1. [MVC](https://learn.microsoft.com/en-us/aspnet/core/data/ef-mvc/intro?view=aspnetcore-9.0) > *examples partially finished*
 2. [Razor Pages](https://learn.microsoft.com/en-us/aspnet/core/data/ef-rp/intro?view=aspnetcore-9.0&tabs=visual-studio) > *examples partially finished*
 3. [Minimal API](https://learn.microsoft.com/en-us/aspnet/core/fundamentals/minimal-apis/overview?view=aspnetcore-9.0) > *examples partially finished*
-4. [RazorSlices](https://github.com/DamianEdwards/RazorSlices) > *Active Search implemented first*
+4. [RazorSlices](https://github.com/DamianEdwards/RazorSlices) > *Active Search and Bulk Update implemented*
 
 ## MVC project [https://datastar.gridsixty.com](https://datastar.gridsixty.com)
 ![Active Search Demo](datastar-examples.png)  

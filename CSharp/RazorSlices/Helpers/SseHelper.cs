@@ -58,4 +58,36 @@ public static class SseHelper
             response.Body.Close();
         }
     }
+
+    public static async Task PatchSignalsAsync(
+        HttpResponse response,
+        string signalsJson,
+        bool onlyIfMissing = false,
+        bool end = false)
+    {
+        var normalized = (signalsJson ?? string.Empty)
+            .Replace(Environment.NewLine, string.Empty)
+            .Replace("\n", string.Empty)
+            .Replace("\r", string.Empty)
+            .Trim();
+
+        var data = new StringBuilder();
+        data.AppendLine("event: datastar-patch-signals");
+
+        if (onlyIfMissing)
+        {
+            data.AppendLine("data: onlyIfMissing true");
+        }
+
+        data.AppendLine($"data: signals {normalized}");
+        data.AppendLine();
+
+        await response.Body.WriteAsync(Encoding.UTF8.GetBytes(data.ToString()));
+        await response.Body.FlushAsync();
+
+        if (end)
+        {
+            response.Body.Close();
+        }
+    }
 }

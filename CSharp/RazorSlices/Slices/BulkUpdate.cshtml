@@ -1,0 +1,72 @@
+@inherits RazorSlice<BulkUpdatePageModel>
+@implements IUsesLayout<_Layout, LayoutModel>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+<section id="example">
+    <h2>Bulk Update (ASP.NET Core RazorSlices)</h2>
+    <p>This example shows how to implement bulk updates. Select users via checkboxes and click Activate or Deactivate to update their status.</p>
+
+    <div class="example-content">
+        <div
+            id="bulk-update-demo"
+            data-signals__ifmissing="{_fetching: false, selections: [@Model.SelectionDefaults]}"
+        >
+            <table class="edit-row-table bulk-update-table">
+                <thead>
+                    <tr>
+                        <th>
+                            <input
+                                type="checkbox"
+                                data-bind:_all
+                                data-on:change="$selections = $selections.map(() => $_all)"
+                                data-attr:disabled="$_fetching"
+                            />
+                        </th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                @await RenderPartialAsync(_BulkUpdateRows.Create(new BulkUpdateRowsModel(Model.Users)))
+            </table>
+            <div class="bulk-actions" role="group">
+                <button
+                    class="button success"
+                    data-on:click="@@put('/api/bulk-update/activate')"
+                    data-indicator:_fetching
+                    data-attr:disabled="$_fetching"
+                >
+                    Activate
+                </button>
+                <button
+                    class="button error"
+                    data-on:click="@@put('/api/bulk-update/deactivate')"
+                    data-indicator:_fetching
+                    data-attr:disabled="$_fetching"
+                >
+                    Deactivate
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="code">
+    <h2>Code</h2>
+    <p>This RazorSlices version keeps the page shell server-rendered, then uses Datastar SSE patches to replace the table body and reset checkbox signals after each bulk action.</p>
+</section>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+@await RenderPartialAsync(_MoreExamples.Create())
+
+@functions {
+    public LayoutModel LayoutModel => new() { Title = "Bulk Update (ASP.NET Core RazorSlices)" };
+}

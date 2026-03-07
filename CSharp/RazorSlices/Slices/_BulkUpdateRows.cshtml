@@ -1,0 +1,20 @@
+@inherits RazorSlice<BulkUpdateRowsModel>
+
+<tbody id="bulk-update-table">
+@for (var i = 0; i < Model.Users.Count; i++)
+{
+    var user = Model.Users[i];
+    <tr>
+        <td>
+            <input
+                type="checkbox"
+                data-bind:selections
+                data-attr:disabled="$_fetching"
+            />
+        </td>
+        <td>@user.Name</td>
+        <td>@user.Email</td>
+        <td>@user.Status</td>
+    </tr>
+}
+</tbody>
