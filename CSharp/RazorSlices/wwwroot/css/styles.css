@@ -1,0 +1,910 @@
+:root {
+    --background-color: #1D2A40;
+    --accent-color: #957B44;
+    --max-width: 1200px;
+    --container-padding: 1rem;
+    --font-mono: Monaco, Consolas, "Lucida Console", monospace;
+    --font-size-base: 18px;
+    --line-height-base: 1.8;
+    --font-size-h1: clamp(2rem, 5vw, 3rem);
+    --font-size-h2: clamp(1.75rem, 4vw, 2.5rem);
+    --font-size-h3: clamp(1.5rem, 3vw, 2rem);
+    --font-size-h4: clamp(1.25rem, 2.5vw, 1.75rem);
+    --paragraph-size: clamp(1.125rem, 2vw, 1.25rem);
+
+    /* Breakpoints */
+    --mobile: 320px;
+    --tablet: 768px;
+    --desktop: 1200px;
+
+    /* Responsive spacing */
+    --spacing-xs: 0.5rem;
+    --spacing-sm: 1rem;
+    --spacing-md: 1.5rem;
+    --spacing-lg: 2rem;
+    --spacing-xl: 3rem;
+
+    /* Responsive font sizes */
+    --font-size-base: clamp(16px, 2vw, 18px);
+    --font-size-h1: clamp(1.75rem, 5vw, 3rem);
+    --font-size-h2: clamp(1.5rem, 4vw, 2.5rem);
+    --font-size-h3: clamp(1.25rem, 3vw, 2rem);
+    --font-size-h4: clamp(1.1rem, 2.5vw, 1.75rem);
+    --paragraph-size: clamp(1rem, 2vw, 1.25rem);
+}
+
+html {
+    font-size: var(--font-size-base);
+}
+
+body {
+    background-color: var(--background-color);
+    color: #ffffff;
+    font-family: var(--font-mono);
+    line-height: var(--line-height-base);
+    font-size: var(--paragraph-size);
+}
+
+/* Update heading sizes */
+h1 { font-size: var(--font-size-h1); }
+h2 { font-size: var(--font-size-h2); }
+h3 { font-size: var(--font-size-h3); }
+h4 { font-size: var(--font-size-h4); }
+
+/* Update headings to use Monaco */
+h1, h2, h3, h5, h6 {
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+/* Update button font */
+button {
+    font-family: var(--font-mono);
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 500;
+    font-size: 1.125rem;
+}
+
+button:hover {
+    background: #b39552;
+}
+
+button:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Keep monospace font in code blocks if you have any */
+pre, code {
+    font-family: var(--font-mono);
+}
+
+/* Container for content width control */
+.container {
+    width: 100%;
+    max-width: var(--desktop);
+    margin: 0 auto;
+    padding: 0 var(--spacing-sm);
+}
+
+/* Section spacing - global consistency */
+section {
+    margin: var(--spacing-md) 0;
+    padding: var(--spacing-lg);
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 0.5rem;
+}
+
+section h2 {
+    color: var(--accent-color);
+    margin-bottom: var(--spacing-lg);
+}
+
+section h3 {
+    display: flex;
+    align-items: center;
+    color: var(--accent-color);
+    margin: var(--spacing-lg) 0 var(--spacing-sm) 0;
+}
+
+section h3:first-of-type {
+    margin-top: 0;
+}
+
+section p {
+    margin-bottom: var(--spacing-md);
+    opacity: 0.9;
+}
+
+section a {
+    display: inline-block;
+    color: var(--accent-color);
+    text-decoration: none;
+    margin-bottom: var(--spacing-lg);
+}
+
+section a:hover {
+    text-decoration: none;
+    transform: translateX(4px);
+}
+
+/* Header styles */
+header {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);  /* Reduced from 1rem */
+    padding: var(--spacing-md) 0;  /* Reduced from spacing-lg */
+    margin-bottom: var(--spacing-md);  /* Reduced from spacing-lg */
+}
+
+.header-top {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.header-images {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-shrink: 0;
+}
+
+.header-images img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+.header-images img.profile {
+    border-radius: 50%;
+}
+
+.header-top h1 {
+    margin: 0;
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    line-height: 1.2;
+}
+
+/* Article grid layout */
+.articles-grid {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+    margin: var(--spacing-md) 0;
+}
+
+/* Article styles */
+article {
+    cursor: pointer;
+    transition: transform 0.2s ease;  /* Only transition the transform */
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0;
+    border-radius: 0.5rem;
+    border: 1px solid transparent;
+}
+
+/* Move padding to the link */
+article a {
+    display: block;
+    padding: var(--spacing-lg);
+    color: inherit;
+    text-decoration: none;
+}
+
+/* Article link styles */
+.article-content h3 {
+    color: var(--accent-color);
+    margin-bottom: 0.75rem;
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+}
+
+.article-content a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.article-content a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+
+article:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent-color);
+}
+
+article:active {
+    transform: translateY(0);
+}
+
+.article-content h4 {
+    color: var(--accent-color);
+    margin-bottom: 0.75rem;
+    font-size: clamp(1.1rem, 2vw, 1.25rem);
+}
+
+.article-content p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: var(--paragraph-size);
+    line-height: var(--line-height-base);
+}
+
+/* Link styles */
+a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.2s ease;
+    outline: none;
+}
+
+a:hover {
+    color: #b39552;
+    text-decoration: underline;
+}
+
+a:focus-visible {
+    outline: 3px solid var(--accent-color);
+    outline-offset: 2px;
+}
+
+/* Keep article links without underline */
+article a:hover {
+    text-decoration: none;
+}
+
+/* List styles */
+ul:not(.articles-grid) {
+    padding-left: 2rem;
+    margin: 1rem 0;
+    list-style: none;
+}
+
+ul:not(.articles-grid) li {
+    margin-bottom: 1rem;
+    position: relative;
+    padding-left: 2rem;
+}
+
+ul:not(.articles-grid) li::before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: var(--accent-color);
+    font-family: var(--font-mono);
+    transform: translateY(-1px);
+    transition: transform 0.2s ease;
+    font-size: 1.25rem;
+}
+
+ul:not(.articles-grid) li:hover::before {
+    transform: translateX(3px) translateY(-1px);
+}
+
+/* Footer styles */
+footer {
+    margin-top: var(--spacing-lg);  /* Reduced from 4rem */
+    padding: var(--spacing-md) 0;  /* Reduced from 2rem */
+    text-align: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 1rem;
+}
+
+/* Mobile First Media Queries */
+@media (min-width: 480px) {
+    .container {
+        padding: 0 var(--spacing-md);
+    }
+
+    article {
+        padding: var(--spacing-md);
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding: 0 var(--spacing-lg);
+    }
+
+    .header-top {
+        flex-direction: row;
+    }
+
+    section {
+        padding: var(--spacing-lg);
+    }
+}
+
+@media (min-width: 1024px) {
+    section {
+        padding: var(--spacing-xl);
+    }
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 479px) {
+    :root {
+        --spacing-sm: 0.75rem;
+        --spacing-md: 1rem;
+        --spacing-lg: 1.5rem;
+    }
+
+    .header-images img {
+        width: 32px;
+        height: 32px;
+    }
+
+    .header-top {
+        gap: var(--spacing-sm);
+    }
+
+    section {
+        margin: var(--spacing-md) 0;
+    }
+
+    ul:not(.articles-grid) {
+        padding-left: var(--spacing-md);
+    }
+
+    ul:not(.articles-grid) li {
+        padding-left: var(--spacing-md);
+    }
+
+    button, .button {
+        width: 100%;
+        text-align: center;
+        padding: var(--spacing-sm) var(--spacing-md);
+    }
+
+    .articles-grid {
+        gap: var(--spacing-lg);
+    }
+
+    article {
+        margin-bottom: var(--spacing-md);
+    }
+
+    header {
+        padding: var(--spacing-md) 0;
+        margin-bottom: var(--spacing-md);
+    }
+}
+
+/* Touch device optimizations */
+@media (hover: none) {
+    article {
+        transform: none !important;
+    }
+
+    article:active {
+        background: rgba(149, 123, 68, 0.1);
+    }
+
+    button, .button {
+        padding: var(--spacing-md) var(--spacing-lg);  /* Larger touch targets */
+    }
+
+    ul:not(.articles-grid) li::before {
+        font-size: 1.5rem;  /* Larger arrow for touch */
+    }
+}
+
+/* Ensure proper spacing in landscape mode */
+@media (max-height: 480px) and (orientation: landscape) {
+    section {
+        margin: var(--spacing-md) 0;
+    }
+
+    .header-top {
+        padding: var(--spacing-sm) 0;
+    }
+}
+
+/* Update existing responsive styles */
+@media (max-width: 768px) {
+    :root {
+        --container-padding: var(--spacing-sm);
+    }
+
+    .header-top {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}
+
+@media (min-width: 769px) {
+    :root {
+        --container-padding: var(--spacing-lg);
+    }
+}
+
+/* Skip to main content link for accessibility */
+.skip-to-main {
+    position: absolute;
+    left: -9999px;
+    z-index: 999;
+    padding: 1rem;
+    background: var(--accent-color);
+    color: white;
+    text-decoration: none;
+}
+
+.skip-to-main:focus {
+    left: 50%;
+    transform: translateX(-50%);
+    top: 0;
+}
+
+/* Add high contrast focus indicators */
+:focus {
+    outline: 3px solid #ffffff;
+    outline-offset: 3px;
+}
+
+/* Add user preference media queries */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* Add high contrast mode support */
+@media (prefers-contrast: high) {
+    :root {
+        --accent-color: #b39552;
+    }
+
+    body {
+        color: #ffffff;
+        background-color: #000000;
+    }
+}
+
+/* Support for users who prefer reduced transparency */
+@media (prefers-reduced-transparency: reduce) {
+    article, section {
+        background: var(--background-color);
+        border: 1px solid var(--accent-color);
+    }
+}
+
+/* Remove all the complex grid, benefit-item, and example-item styles */
+
+/* Status icon styles */
+.status-icon {
+    display: inline-block;
+    margin-right: var(--spacing-sm);
+    font-size: 2rem;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    border-radius: 50%;
+}
+
+.status-icon.complete {
+    color: #4CAF50;
+    background: rgba(76, 175, 80, 0.1);
+}
+
+.status-icon.pending {
+    color: #FFD700;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+.status-icon.todo {
+    color: #FF5252;
+    background: rgba(255, 82, 82, 0.1);
+}
+
+/* Adjust h3 for icon alignment */
+section h3 {
+    display: flex;
+    align-items: center;
+    color: var(--accent-color);
+    margin: var(--spacing-lg) 0 var(--spacing-sm) 0;
+}
+
+/* Button styles */
+.button {
+    display: block;  /* Changed from inline-block */
+    width: 100%;     /* Full width */
+    font-family: var(--font-mono);
+    background: rgba(149, 123, 68, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    font-size: var(--paragraph-size);
+    text-align: center;
+    text-decoration: none;
+    margin: var(--spacing-md) 0;
+}
+
+.button:hover {
+    background: rgba(149, 123, 68, 0.2);
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+}
+
+/* Example navigation buttons */
+.example-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+}
+
+.example-nav a {
+    padding: 0.1rem 0;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.example-nav a:hover {
+    color: var(--accent);
+}
+
+.example-nav a.current {
+    color: var(--accent);
+    font-weight: bold;
+}
+
+/* Mobile adjustments */
+@media (max-width: 479px) {
+    .example-nav {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Search input styling */
+.search-container {
+    display: flex;
+    justify-content: center;
+    margin: 1rem 0;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    font-size: 1.1rem;
+    border: 2px solid var(--accent-color);
+    border-radius: 2rem;
+    background: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+    transition: all 0.2s ease;
+}
+
+.search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(149, 123, 68, 0.3);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.search-input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Mobile adjustments */
+@media (max-width: 768px) {
+    .search-container {
+        margin: 0.5rem 0;
+    }
+
+    .search-input {
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        border-radius: 1.5rem;
+    }
+}
+
+/* Notes list styling */
+.notes-list {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.note-item {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--accent-color);
+    border-radius: 0.5rem;
+    padding: 1rem;
+    transition: all 0.2s ease;
+}
+
+.note-item:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateX(4px);
+}
+
+.note-item p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.9);
+}
+
+/* Mobile adjustments for notes */
+@media (max-width: 768px) {
+    .notes-list {
+        margin-top: 1rem;
+        gap: 0.75rem;
+    }
+
+    .note-item {
+        padding: 0.75rem;
+    }
+}
+
+/* Demo navigation button styles */
+.demo-nav-link {
+    display: inline-block;
+    font-family: var(--font-mono);
+    background: rgba(149, 123, 68, 0.1);
+    color: var(--accent-color);
+    border: 1px solid var(--accent-color);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.demo-nav-link:hover {
+    background: rgba(149, 123, 68, 0.2);
+    text-decoration: none;
+    transform: translateY(-2px);
+}
+
+.demo-nav-link:active {
+    transform: translateY(0);
+}
+
+/* Add these styles to your existing CSS file */
+.lazy-load {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.transition-opacity {
+    transition: opacity 0.3s ease;
+}
+
+/* Update the demo-content class instead of creating a new demo-box */
+.demo-content {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 4px;
+    text-align: left;
+}
+
+.button-disabled {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: rgba(255, 255, 255, 0.5) !important;
+    cursor: not-allowed !important;
+    border: none !important;
+    width: 100%;
+    padding: var(--spacing-md);
+    margin-top: var(--spacing-md);
+}
+
+.button-container {
+    margin-top: var(--spacing-md);
+    width: 100%;
+}
+
+.button {
+    width: 100%;
+    padding: var(--spacing-md);
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: var(--font-mono);
+}
+
+.button:hover {
+    background: #b39552;
+    color: white;
+    transform: translateY(-2px);
+}
+
+.button:active {
+    transform: translateY(0);
+    color: white;
+}
+
+.indicator {
+    opacity: 0;
+    transition: opacity 300ms ease-out;
+}
+
+.indicator.loading {
+    opacity: 1;
+    transition: opacity 300ms ease-in;
+}
+
+.loading-dots::after {
+    content: '';
+    animation: dots 1.5s steps(5, end) infinite;
+}
+
+@keyframes dots {
+    0%, 20% { content: ''; }
+    40% { content: '.'; }
+    60% { content: '..'; }
+    80%, 100% { content: '...'; }
+}
+
+/* Header anchor links */
+.header-anchor {
+    color: inherit;
+    text-decoration: none;
+    opacity: 0.7;
+}
+
+.header-anchor:hover {
+    color: var(--accent-color);
+    text-decoration: none;
+}
+
+h2:hover .header-anchor::after {
+    content: " #";
+    color: var(--accent-color);
+}
+
+.note-item.datastar-swapping {
+    opacity: 0;
+    height: 0px;
+    overflow: hidden;
+    transition: opacity 1s ease-out;
+}
+
+/* Edit Row table styles */
+.edit-row-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--spacing-md) 0;
+}
+
+.edit-row-table thead {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-table th {
+    padding: 0.75rem;
+    text-align: left;
+    border-bottom: 2px solid var(--accent-color);
+    color: var(--accent-color);
+}
+
+.edit-row-table td {
+    padding: 0.75rem;
+}
+
+.edit-row-table tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-table input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid var(--accent-color);
+    border-radius: 4px;
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+}
+
+.edit-row-table input:focus {
+    outline: none;
+    border-color: #b39552;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.edit-row-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.button.info {
+    background-color: #0066cc;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.info:hover {
+    background-color: #0052a3;
+}
+
+.button.success {
+    background-color: #4CAF50;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.success:hover {
+    background-color: #45a049;
+}
+
+.button.error {
+    background-color: #f44336;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+    margin: 0;
+}
+
+.button.error:hover {
+    background-color: #da190b;
+}
+
+.button.warning {
+    background-color: #ff9800;
+    color: white;
+    padding: 0.5rem 1rem;
+    width: auto;
+}
+
+.button.warning:hover {
+    background-color: #e68900;
+}
+
+.reset-button-container {
+    margin-top: 1rem;
+}
+
+/* Mobile adjustments for edit row table */
+@media (max-width: 768px) {
+    .edit-row-table {
+        font-size: 0.9rem;
+    }
+
+    .edit-row-table th,
+    .edit-row-table td {
+        padding: 0.5rem;
+    }
+
+    .edit-row-actions {
+        flex-direction: column;
+        gap: 0.25rem;
+    }
+
+    .button.info,
+    .button.success,
+    .button.error,
+    .button.warning {
+        width: 100%;
+        text-align: center;
+    }
+}

@@ -1,0 +1,19 @@
+@inherits RazorSlice<ActiveSearchResultsModel>
+
+<div id="notes-list" class="notes-list">
+    @if (Model.Notes.Count == 0)
+    {
+        <div class="note-item">
+            <p>No notes found matching "@Model.Query"</p>
+        </div>
+    }
+    else
+    {
+        @foreach (var note in Model.Notes)
+        {
+            <div class="note-item">
+                <p>@note.Content</p>
+            </div>
+        }
+    }
+</div>

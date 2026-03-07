@@ -1,0 +1,10 @@
+@inherits RazorSlice<ActiveSearchCountsModel>
+
+@if (!string.IsNullOrWhiteSpace(Model.Query) && Model.CurrentCount == 0)
+{
+    <p id="total-count">No results found for "@Model.Query" out of <span class="number">@Model.TotalCount</span> notes</p>
+}
+else
+{
+    <p id="total-count">Showing <span class="number">@Model.CurrentCount</span> of <span class="number">@Model.TotalCount</span> notes</p>
+}

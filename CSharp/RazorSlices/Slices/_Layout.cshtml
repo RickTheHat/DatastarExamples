@@ -1,0 +1,49 @@
+@inherits RazorLayoutSlice<LayoutModel>
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="@Model.Title - Datastar ASP.NET Core Examples - A lightweight hypermedia framework for building reactive web applications">
+    <meta name="color-scheme" content="light dark" />
+    <base href="/" />
+    <link rel="stylesheet" href="/css/reset.css" />
+    <link rel="stylesheet" href="/css/styles.css" />
+    <script type="module" src="https://cdn.jsdelivr.net/gh/starfederation/datastar@1.0.0-RC.8/bundles/datastar.js"></script>
+    <title>@Model.Title - Datastar is The Hypermedia Framework</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+</head>
+<body>
+<div class="container">
+    <header>
+        <div class="header-top">
+            <div class="header-images">
+                <a href="https://data-star.dev" target="_blank" aria-label="Visit Datastar website">
+                    <img src="/img/rocket.webp" alt="Datastar logo">
+                </a>
+                <a href="https://github.com/RickTheHat/DatastarExamples" target="_blank" aria-label="Visit Rick's GitHub profile">
+                    <img src="/img/rick.jpg" alt="Author profile" class="profile">
+                </a>
+            </div>
+            <a href="/" style="text-decoration: none; cursor: pointer; color: #fff;">
+                <h1>ASP.NET Core RazorSlices Examples with Datastar</h1>
+            </a>
+        </div>
+        <p>The hypermedia framework • Scale up from simple to real-time web apps</p>
+        <a href="/#examples" class="button">GO TO EXAMPLES</a>
+    </header>
+
+    <main id="main-content">
+        @await RenderBodyAsync()
+    </main>
+
+    <footer>
+        <small>
+            <p>
+                Inspired by • <a href="https://en.wikipedia.org/wiki/Hypermedia" target="_blank">Hypermedia</a> • <a href="https://en.wikipedia.org/wiki/HATEOAS" target="_blank">HATEOAS</a> • <a href="https://htmx.org/" target="_blank">Htmx</a><br>Built with • <a href="https://en.wikipedia.org/wiki/MIT_License" target="_blank">MIT license</a> • <a href="https://data-star.dev" target="_blank">Datastar</a> • <a href="https://dotnet.microsoft.com/en-us/apps/aspnet" target="_blank">ASP.NET Core</a> • <a href="https://github.com/DamianEdwards/RazorSlices" target="_blank">RazorSlices</a>
+            </p>
+        </small>
+    </footer>
+</div>
+</body>
+</html>

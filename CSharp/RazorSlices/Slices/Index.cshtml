@@ -1,0 +1,65 @@
+@inherits RazorSlice
+@implements IUsesLayout<_Layout, LayoutModel>
+
+<section id="what-is-datastar">
+    <h2>What is Datastar?</h2>
+    <p>Datastar is a lightweight hypermedia framework that brings reactive functionality to server-rendered applications. It combines the best of both worlds:</p>
+    <ul>
+        <li>The simplicity and reliability of server-side rendering</li>
+        <li>The dynamic, reactive user experience in the style of a Single Page Application (SPA) but with very little to no JavaScript</li>
+    </ul>
+</section>
+<section id="project-status">
+    <h2>Project Status</h2>
+    <p>These ASP.NET Core Examples with Datastar are currently in development. The project is open source and contributions are welcome.</p>
+    <ul>
+        <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/Mvc" target="_blank">ASP.NET Core MVC</a></li>
+        <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/RazorPages" target="_blank">ASP.NET Core Razor Pages</a></li>
+        <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/MinimalApi" target="_blank">ASP.NET Core Minimal APIs</a></li>
+        <li><span style="color:green">working</span>&nbsp;<a href="https://github.com/RickTheHat/DatastarExamples/tree/main/CSharp/RazorSlices" target="_blank">ASP.NET Core RazorSlices</a></li>
+    </ul>
+</section>
+<section id="benefits">
+    <h2>Datastar Benefits</h2>
+    <h3>Say Goodbye to Full Page Refreshes</h3>
+    <p>The dreaded full page refresh is a thing of the past with Datastar - enjoy smooth, partial updates that keep your users in flow.</p>
+
+    <h3>Build Like a Pro, Code Like a Beginner</h3>
+    <p>Create sophisticated, reactive web applications without wrestling with complex state management or JavaScript frameworks.</p>
+
+    <h3>Your Server, Your Rules</h3>
+    <p>Keep all your business logic where it belongs - on the server. No more duplicating validation rules or business logic in JavaScript.</p>
+
+    <h3>Instant Feedback</h3>
+    <p>Create responsive interfaces that feel like native apps - type in a search box and watch results filter instantly, all without complex client-side code.</p>
+</section>
+<section id="why-use-datastar">
+    <h2>Why use Datastar?</h2>
+    <ul>
+        <li>Minimal JavaScript • Just include a single 13.3 KiB file - smaller than Alpine.js and HTMX combined</li>
+        <li>HATEOAS Compliant • The only JavaScript you need is the library itself - no additional client-side code required</li>
+        <li>Server Technology Agnostic • Write your backend in any language</li>
+        <li>Real-time Updates • Utilizes server-sent events for fast, responsive experiences</li>
+    </ul>
+</section>
+<section id="examples">
+    <h2>Datastar Examples</h2>
+    <p>PORTED HTMX EXAMPLES</p>
+
+    <h3>
+        <span class="status-icon complete" title="Complete">✓</span>
+        ACTIVE SEARCH
+    </h3>
+    <p>This example actively searches a notes database as the user enters text.</p>
+    <a href="/active-search">View Example →</a>
+
+    <h3>
+        <span class="status-icon todo" title="Not Started">✗</span>
+        MORE EXAMPLES COMING SOON
+    </h3>
+    <p>Active Search is the first RazorSlices port and establishes the baseline for future examples.</p>
+</section>
+
+@functions {
+    public LayoutModel LayoutModel => new();
+}

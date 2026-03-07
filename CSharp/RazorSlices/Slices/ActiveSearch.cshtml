@@ -1,0 +1,36 @@
+@inherits RazorSlice<ActiveSearchPageModel>
+@implements IUsesLayout<_Layout, LayoutModel>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+<section id="example">
+    <h2>Active Search (ASP.NET Core RazorSlices)</h2>
+    <p>This example actively searches a notes database as the user enters text.</p>
+
+    <div class="example-content">
+        <div class="search-container">
+            <input type="search" placeholder="Search notes..." class="search-input" aria-label="Search notes" data-bind:input data-on:input__debounce.250ms="@@put('/api/active-search')" autocomplete="off" />
+        </div>
+        @await RenderPartialAsync(_ActiveSearchCounts.Create(new ActiveSearchCountsModel(string.Empty, Model.CurrentCount, Model.TotalCount)))
+        @await RenderPartialAsync(_ActiveSearchNotes.Create(new ActiveSearchResultsModel(string.Empty, Model.Notes)))
+    </div>
+</section>
+
+<section id="code">
+    <h2>Code</h2>
+    <p>This RazorSlices version uses Datastar SSE patches plus Razor slice partials for both the counts summary and the note results.</p>
+</section>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+@await RenderPartialAsync(_MoreExamples.Create())
+
+@functions {
+    public LayoutModel LayoutModel => new() { Title = "Active Search (ASP.NET Core RazorSlices)" };
+}

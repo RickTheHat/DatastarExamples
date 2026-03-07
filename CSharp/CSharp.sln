@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalAPI", "MinimalApi\Mi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorPages", "RazorPages\RazorPages.csproj", "{5218305D-C701-4745-924D-6313BE915EB6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RazorSlices", "RazorSlices\RazorSlicesExample.csproj", "{C6D43221-1D1C-4EDD-B2AF-1802B685A8ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{5218305D-C701-4745-924D-6313BE915EB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5218305D-C701-4745-924D-6313BE915EB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5218305D-C701-4745-924D-6313BE915EB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C6D43221-1D1C-4EDD-B2AF-1802B685A8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C6D43221-1D1C-4EDD-B2AF-1802B685A8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C6D43221-1D1C-4EDD-B2AF-1802B685A8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C6D43221-1D1C-4EDD-B2AF-1802B685A8ED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

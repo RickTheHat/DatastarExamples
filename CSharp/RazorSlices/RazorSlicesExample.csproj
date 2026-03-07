@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyName>DatastarExamples.RazorSlicesApp</AssemblyName>
+    <RootNamespace>DatastarExamples.RazorSlicesApp</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Bogus" Version="35.6.4" />
+    <PackageReference Include="RazorSlices" Version="0.9.5" />
+  </ItemGroup>
+
+</Project>
