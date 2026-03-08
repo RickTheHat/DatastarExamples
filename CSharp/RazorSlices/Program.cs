@@ -24,11 +24,15 @@ if (app.Environment.IsDevelopment())
 
 app.UseStaticFiles();
 
+var currentContact = new Contact { Id = 1, FirstName = "John", LastName = "Doe", Email = "joe@blow.com" };
+
 app.MapGet("/", () => Results.Extensions.RazorSlice<DatastarExamples.RazorSlicesApp.Slices.Index>());
 app.MapGet("/active-search", (NoteRepository noteRepository) =>
     Results.Extensions.RazorSlice<ActiveSearch, ActiveSearchPageModel>(ActiveSearchPageModel.Create(noteRepository)));
 app.MapGet("/bulk-update", (UserRepository userRepository) =>
     Results.Extensions.RazorSlice<BulkUpdate, BulkUpdatePageModel>(BulkUpdatePageModel.Create(userRepository)));
+app.MapGet("/click-to-edit", () =>
+    Results.Extensions.RazorSlice<ClickToEdit, ClickToEditPageModel>(new ClickToEditPageModel { Contact = currentContact }));
 
 app.MapPut("/api/active-search", async (HttpContext context, NoteRepository noteRepository) =>
 {
@@ -53,6 +57,41 @@ app.MapPut("/api/bulk-update/activate", (HttpContext context, UserRepository use
 
 app.MapPut("/api/bulk-update/deactivate", (HttpContext context, UserRepository userRepository) =>
     HandleBulkUpdateAsync(context, userRepository, userRepository.Deactivate));
+
+app.MapGet("/api/clicktoedit/form", async (HttpContext context) =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+    var formHtml = await RenderSliceAsync(_ClickToEditForm.Create(currentContact), context.RequestServices);
+    await SseHelper.SendServerSentEventAsync(context.Response, formHtml, "#demo");
+});
+
+app.MapPut("/api/clicktoedit/save", async (HttpContext context) =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+    var (firstName, lastName, email) = await DatastarPayloadReader.ReadContactSignalsAsync(context.Request);
+    if (!string.IsNullOrEmpty(firstName)) currentContact.FirstName = firstName;
+    if (!string.IsNullOrEmpty(lastName)) currentContact.LastName = lastName;
+    if (!string.IsNullOrEmpty(email)) currentContact.Email = email;
+    var displayHtml = await RenderSliceAsync(_ClickToEditDisplay.Create(currentContact), context.RequestServices);
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
+});
+
+app.MapGet("/api/clicktoedit/cancel", async (HttpContext context) =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+    var displayHtml = await RenderSliceAsync(_ClickToEditDisplay.Create(currentContact), context.RequestServices);
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
+});
+
+app.MapPatch("/api/clicktoedit/reset", async (HttpContext context) =>
+{
+    await SseHelper.SetSseHeadersAsync(context.Response);
+    currentContact.FirstName = "John";
+    currentContact.LastName = "Doe";
+    currentContact.Email = "joe@blow.com";
+    var displayHtml = await RenderSliceAsync(_ClickToEditDisplay.Create(currentContact), context.RequestServices);
+    await SseHelper.SendServerSentEventAsync(context.Response, displayHtml, "#demo");
+});
 
 app.Run();
 

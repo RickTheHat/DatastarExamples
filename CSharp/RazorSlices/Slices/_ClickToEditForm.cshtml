@@ -1,0 +1,52 @@
+@inherits RazorSlice<Contact>
+
+<div id="demo" style="display: flex; flex-direction: column; gap: 1rem;">
+    <label style="display: flex; flex-direction: column; gap: 0.5rem;">
+        First Name
+        <input
+            type="text"
+            data-bind:first-name
+            value="@Model.FirstName"
+            data-attr:disabled="$_fetching"
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"
+        >
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 0.5rem;">
+        Last Name
+        <input
+            type="text"
+            data-bind:last-name
+            value="@Model.LastName"
+            data-attr:disabled="$_fetching"
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"
+        >
+    </label>
+    <label style="display: flex; flex-direction: column; gap: 0.5rem;">
+        Email
+        <input
+            type="email"
+            data-bind:email
+            value="@Model.Email"
+            data-attr:disabled="$_fetching"
+            style="padding: 0.5rem; border: 1px solid #ccc; border-radius: 4px;"
+        >
+    </label>
+    <div role="group" style="display: flex; gap: 1rem;">
+        <button
+            class="button success"
+            data-indicator:_fetching
+            data-attr:disabled="$_fetching"
+            data-on:click="@@put('/api/clicktoedit/save')"
+        >
+            Save
+        </button>
+        <button
+            class="button error"
+            data-indicator:_fetching
+            data-attr:disabled="$_fetching"
+            data-on:click="@@get('/api/clicktoedit/cancel')"
+        >
+            Cancel
+        </button>
+    </div>
+</div>

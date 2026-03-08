@@ -1,0 +1,32 @@
+@inherits RazorSlice<ClickToEditPageModel>
+@implements IUsesLayout<_Layout, LayoutModel>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+<section id="example">
+    <h2>Click To Edit (ASP.NET Core RazorSlices)</h2>
+    <p>Click on the Edit button below to inline edit the contact information.</p>
+
+    <div class="example-content">
+        @await RenderPartialAsync(_ClickToEditDisplay.Create(Model.Contact))
+    </div>
+</section>
+
+<section id="code">
+    <h2>Code</h2>
+    <p>This RazorSlices version uses Datastar SSE patches plus Razor slice partials to swap between the display and edit form views.</p>
+</section>
+
+<div style="display: flex; justify-content: space-between; gap: 1rem;">
+    <a href="/#examples" class="demo-nav-link">← BACK TO EXAMPLES</a>
+    <span></span>
+</div>
+
+@await RenderPartialAsync(_MoreExamples.Create())
+
+@functions {
+    public LayoutModel LayoutModel => new() { Title = "Click To Edit (ASP.NET Core RazorSlices)" };
+}

@@ -59,4 +59,30 @@ public static class DatastarPayloadReader
 
         return selectedIndices;
     }
+
+    public static async Task<(string FirstName, string LastName, string Email)> ReadContactSignalsAsync(HttpRequest request)
+    {
+        if (request.ContentLength is null or 0)
+        {
+            return (string.Empty, string.Empty, string.Empty);
+        }
+
+        using var document = await JsonDocument.ParseAsync(request.Body);
+
+        if (document.RootElement.ValueKind != JsonValueKind.Object)
+        {
+            return (string.Empty, string.Empty, string.Empty);
+        }
+
+        string firstName = string.Empty, lastName = string.Empty, email = string.Empty;
+
+        if (document.RootElement.TryGetProperty("firstName", out var fn) && fn.ValueKind == JsonValueKind.String)
+            firstName = fn.GetString() ?? string.Empty;
+        if (document.RootElement.TryGetProperty("lastName", out var ln) && ln.ValueKind == JsonValueKind.String)
+            lastName = ln.GetString() ?? string.Empty;
+        if (document.RootElement.TryGetProperty("email", out var em) && em.ValueKind == JsonValueKind.String)
+            email = em.GetString() ?? string.Empty;
+
+        return (firstName, lastName, email);
+    }
 }
