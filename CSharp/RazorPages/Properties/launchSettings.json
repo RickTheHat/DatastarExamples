@@ -1,20 +1,26 @@
 {
   "$schema": "https://json.schemastore.org/launchsettings.json",
   "profiles": {
+    "dev": {
+      "commandName": "Project",
+      "dotnetRunMessages": true,
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:22346",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "Logging__LogLevel__Default": "Debug",
+        "Logging__LogLevel__Microsoft": "Information",
+        "Logging__LogLevel__Microsoft.AspNetCore": "Information",
+        "Logging__LogLevel__Microsoft.EntityFrameworkCore": "Information",
+        "Logging__LogLevel__Microsoft.EntityFrameworkCore.Database.Command": "Debug",
+        "Logging__LogLevel__System": "Information"
+      }
+    },
     "http": {
       "commandName": "Project",
       "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "http://localhost:5181",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
-    },
-    "https": {
-      "commandName": "Project",
-      "dotnetRunMessages": true,
-      "launchBrowser": true,
-      "applicationUrl": "https://localhost:7037;http://localhost:5181",
+      "launchBrowser": false,
+      "applicationUrl": "http://localhost:22346",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
